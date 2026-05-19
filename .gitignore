@@ -1,0 +1,47 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables
+.env
+
+# Node.js
+node_modules/
+dist/
+
+# Laravel
+vendor/
+storage/logs/*
+bootstrap/cache/*
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+logs/
+*.log
+
+# AI models
+models/
+*.pt
+*.pth
+
+# Docker
+docker-data/
+
+# MySQL dumps
+*.sql
+
+# Temporary files
+tmp/
+temp/
