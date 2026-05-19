@@ -33,6 +33,7 @@ logs/
 
 # AI models
 models/
+*.keras
 *.pt
 *.pth
 
@@ -45,3 +46,6 @@ docker-data/
 # Temporary files
 tmp/
 temp/
+
+# Jupyter
+.ipynb_checkpoints/
