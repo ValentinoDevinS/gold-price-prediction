@@ -23,7 +23,59 @@ class UpdateArticleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+
+            'title' => [
+                'sometimes',
+                'string',
+                'max:500',
+            ],
+
+            'url' => [
+                'sometimes',
+                'url',
+                'max:2000',
+            ],
+
+            'source' => [
+                'sometimes',
+                'string',
+                'max:100',
+            ],
+
+            'published_at' => [
+                'nullable',
+                'date',
+            ],
+
+            'language' => [
+                'sometimes',
+                'string',
+                'max:20',
+            ],
+
+            'country' => [
+                'sometimes',
+                'string',
+                'max:50',
+            ],
+
+            'keyword' => [
+                'sometimes',
+                'string',
+                'max:100',
+            ],
+
+            'scraper' => [
+                'sometimes',
+                'string',
+                'max:100',
+            ],
+
+            'scraped_at' => [
+                'sometimes',
+                'date',
+            ],
+
         ];
     }
 }
