@@ -1,43 +1,34 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Article;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateArticleRequest extends FormRequest
+class StoreArticleRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
 
             'title' => [
-                'sometimes',
+                'required',
                 'string',
                 'max:500',
             ],
 
             'url' => [
-                'sometimes',
+                'required',
                 'url',
                 'max:2000',
             ],
 
             'source' => [
-                'sometimes',
+                'required',
                 'string',
                 'max:100',
             ],
@@ -48,31 +39,31 @@ class UpdateArticleRequest extends FormRequest
             ],
 
             'language' => [
-                'sometimes',
+                'required',
                 'string',
                 'max:20',
             ],
 
             'country' => [
-                'sometimes',
+                'nullable',
                 'string',
                 'max:50',
             ],
 
             'keyword' => [
-                'sometimes',
+                'required',
                 'string',
                 'max:100',
             ],
 
             'scraper' => [
-                'sometimes',
+                'required',
                 'string',
                 'max:100',
             ],
 
             'scraped_at' => [
-                'sometimes',
+                'required',
                 'date',
             ],
 

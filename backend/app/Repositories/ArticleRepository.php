@@ -3,80 +3,47 @@
 namespace App\Repositories;
 
 use App\Models\Article;
-use Carbon\Carbon;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ArticleRepository extends BaseRepository
 {
-    public function __construct(
-        Article $article
-    ) {
-        parent::__construct($article);
-    }
+    protected array $searchable = [
+        'title',
+        'source',
+        'keyword',
+    ];
 
-    /**
-     * Find article by URL hash.
-     */
-    public function findByHash(string $hash): ?Article
+    protected array $filterable = [
+        'status',
+        'source',
+        'country',
+        'language',
+        'scraper',
+    ];
+
+    protected array $sortable = [
+        'published_at',
+        'scraped_at',
+        'created_at',
+        'updated_at',
+    ];
+
+    protected string $defaultSort = 'published_at';
+
+    protected string $defaultDirection = 'desc';
+
+    public function __construct(Article $model)
     {
-        return $this->findBy('url_hash', $hash);
+        parent::__construct($model);
     }
 
     /**
-     * Latest articles.
+     * Check whether an article already exists by URL hash.
      */
-    public function latestArticles(
-        int $perPage = 20
-    ): LengthAwarePaginator {
-
-        return $this->query()
-
-            ->latest('published_at')
-
-            ->paginate($perPage);
-
-    }
-
-    /**
-     * Search articles.
-     */
-    public function searchArticles(
-        ?string $keyword,
-        array $filters = [],
-        int $perPage = 20
-    ): LengthAwarePaginator {
-
-        $query = $this->filterQuery($filters);
-
-        if (!empty($keyword)) {
-
-            $query->where(function ($q) use ($keyword) {
-
-                $q->where('title', 'like', "%{$keyword}%")
-                    ->orWhere('source', 'like', "%{$keyword}%")
-                    ->orWhere('keyword', 'like', "%{$keyword}%");
-
-            });
-
-        }
-
-        return $query
-            ->latest('published_at')
-            ->paginate($perPage);
-    }
-
-    /**
-     * Count today's articles.
-     */
-    public function countToday(): int
+    public function findByUrlHash(string $urlHash): ?Article
     {
-        return $this->query()
-
-            ->whereDate(
-                'scraped_at',
-                Carbon::today()
-            )
-
-            ->count();
+        return $this->findBy(
+            'url_hash',
+            $urlHash
+        );
     }
 }

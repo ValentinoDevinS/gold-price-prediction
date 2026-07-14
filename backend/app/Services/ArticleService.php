@@ -2,8 +2,11 @@
 
 namespace App\Services;
 
+use App\Exceptions\Article\ArticleAlreadyExistsException;
 use App\Helpers\HashHelper;
+use App\Models\Article;
 use App\Repositories\ArticleRepository;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ArticleService extends BaseService
 {
@@ -12,23 +15,29 @@ class ArticleService extends BaseService
     ) {
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | CRUD
+    |--------------------------------------------------------------------------
+    */
+
     /**
-     * Register new article.
+     * Create a new article.
      */
-    public function create(array $data)
+    public function create(array $data): Article
     {
         return $this->execute(function () use ($data) {
 
-            $data['url_hash'] = HashHelper::generate(
+            $data['url_hash'] = $this->generateUrlHash(
                 $data['url']
             );
 
             if (
-                $this->repository->findByHash(
+                $this->repository->findByUrlHash(
                     $data['url_hash']
                 )
             ) {
-                return null;
+                throw new ArticleAlreadyExistsException();
             }
 
             return $this->repository->create($data);
@@ -37,27 +46,121 @@ class ArticleService extends BaseService
     }
 
     /**
-     * List latest articles.
+     * Update an article.
      */
-    public function list(int $perPage = 20)
-    {
-        return $this->repository
-            ->latestArticles($perPage);
+    public function update(
+        string $uuid,
+        array $data
+    ): bool {
+
+        return $this->execute(function () use ($uuid, $data) {
+
+            $article = $this->repository
+                ->findOrFailByUuid($uuid);
+
+            if (
+                array_key_exists(
+                    'url',
+                    $data
+                )
+            ) {
+
+                $data['url_hash'] = $this->generateUrlHash(
+                    $data['url']
+                );
+
+                $existingArticle = $this->repository
+                    ->findByUrlHash(
+                        $data['url_hash']
+                    );
+
+                if (
+                    $existingArticle !== null &&
+                    $existingArticle->uuid !== $article->uuid
+                ) {
+
+                    throw new ArticleAlreadyExistsException();
+
+                }
+
+            }
+
+            return $this->repository
+                ->update(
+                    $article,
+                    $data
+                );
+
+        });
+
     }
 
     /**
-     * Search.
+     * Delete an article.
      */
-    public function search(
-        ?string $keyword,
-        array $filters = [],
-        int $perPage = 20
-    ) {
-        return $this->repository
-            ->searchArticles(
-                $keyword,
-                $filters,
-                $perPage
-            );
+    public function delete(
+        string $uuid
+    ): bool {
+
+        return $this->execute(function () use ($uuid) {
+
+            $article = $this->repository
+                ->findOrFailByUuid($uuid);
+
+            return $this->repository
+                ->delete($article);
+
+        });
+
     }
+
+    /**
+     * Find article by UUID.
+     */
+    public function findByUuid(
+        string $uuid
+    ): Article {
+
+        return $this->repository
+            ->findOrFailByUuid($uuid);
+
+    }
+
+    /**
+     * Retrieve paginated articles.
+     */
+    public function getPaginated(
+        array $filters = [],
+        ?string $search = null,
+        ?string $sort = null,
+        ?string $direction = null,
+        int $perPage = 20
+    ): LengthAwarePaginator {
+
+        return $this->repository->getPaginated(
+            filters: $filters,
+            search: $search,
+            sort: $sort,
+            direction: $direction,
+            perPage: $perPage
+        );
+
+    }
+
+    /**
+     * Generate URL hash.
+     */
+    private function generateUrlHash(
+        string $url
+    ): string {
+
+        return HashHelper::generate($url);
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Business
+    |--------------------------------------------------------------------------
+    */
 }

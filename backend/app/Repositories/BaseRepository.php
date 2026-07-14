@@ -333,7 +333,6 @@ abstract class BaseRepository implements RepositoryInterface
                 self::MAX_PER_PAGE
             )
         );
-        return $perPage;
     }
 
     public function queryList(

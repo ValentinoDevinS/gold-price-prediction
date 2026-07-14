@@ -4,8 +4,13 @@ namespace App\Models;
 
 use App\Enums\ArticleStatus;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class Article extends BaseModel
 {
+
+    use HasFactory;
+
     protected $table = 'articles';
 
     protected $fillable = [
