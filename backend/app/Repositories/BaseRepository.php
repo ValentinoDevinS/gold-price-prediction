@@ -48,6 +48,10 @@ abstract class BaseRepository implements RepositoryInterface
 
     protected string $defaultDirection = self::DEFAULT_DIRECTION;
 
+    /**
+     * Repository constructor.
+     */
+
     public function __construct(Model $model)
     {
         $this->model = $model;
@@ -93,8 +97,10 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->model->all();
     }
 
-    public function latest(int $limit = 20): Collection
-    {
+    public function latest(
+        int $limit = self::DEFAULT_PER_PAGE
+    ): Collection{
+
         return $this->query()
             ->latest($this->defaultSort)
             ->limit($limit)
@@ -108,7 +114,7 @@ abstract class BaseRepository implements RepositoryInterface
         $perPage = $this->sanitizePerPage($perPage);
         return $this->query()
             ->latest($this->defaultSort)
-            ->paginate();
+            ->paginate($perPage);
     }
 
     public function findById(int $id): ?Model
@@ -327,6 +333,7 @@ abstract class BaseRepository implements RepositoryInterface
                 self::MAX_PER_PAGE
             )
         );
+        return $perPage;
     }
 
     public function queryList(
@@ -382,7 +389,7 @@ abstract class BaseRepository implements RepositoryInterface
         if (empty($conditions)) {
             return false;
         }
-        
+
         $query = $this->query();
 
         foreach (
