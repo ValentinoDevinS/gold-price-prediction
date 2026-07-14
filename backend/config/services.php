@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+        'ai' => [
+        'api_key' => env('AI_SERVICE_API_KEY'),
+    ],
+
 ];

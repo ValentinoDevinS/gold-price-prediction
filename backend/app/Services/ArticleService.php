@@ -3,20 +3,25 @@
 namespace App\Services;
 
 use App\Repositories\ArticleRepository;
+use Illuminate\Support\Facades\DB;
 
 class ArticleService
 {
     public function __construct(
-        protected ArticleRepository $repository
-    ){}
+        private readonly ArticleRepository $repository
+    ) {
+    }
 
     public function register(array $data)
     {
-        if($this->repository->findByUrl($data['url']))
-        {
-            return null;
-        }
+        return DB::transaction(function () use ($data) {
 
-        return $this->repository->create($data);
+            if ($this->repository->findByUrl($data['url'])) {
+                return null;
+            }
+
+            return $this->repository->create($data);
+
+        });
     }
 }
