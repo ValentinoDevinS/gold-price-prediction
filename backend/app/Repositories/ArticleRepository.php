@@ -14,14 +14,17 @@ class ArticleRepository extends BaseRepository
         parent::__construct($article);
     }
 
+    /**
+     * Find article by URL hash.
+     */
     public function findByHash(string $hash): ?Article
     {
-        return $this->findBy(
-            'url_hash',
-            $hash
-        );
+        return $this->findBy('url_hash', $hash);
     }
 
+    /**
+     * Latest articles.
+     */
     public function latestArticles(
         int $perPage = 20
     ): LengthAwarePaginator {
@@ -34,18 +37,9 @@ class ArticleRepository extends BaseRepository
 
     }
 
-    public function countToday(): int
-    {
-        return $this->query()
-
-            ->whereDate(
-                'scraped_at',
-                Carbon::today()
-            )
-
-            ->count();
-    }
-
+    /**
+     * Search articles.
+     */
     public function searchArticles(
         ?string $keyword,
         array $filters = [],
@@ -59,17 +53,30 @@ class ArticleRepository extends BaseRepository
             $query->where(function ($q) use ($keyword) {
 
                 $q->where('title', 'like', "%{$keyword}%")
-                  ->orWhere('source', 'like', "%{$keyword}%")
-                  ->orWhere('keyword', 'like', "%{$keyword}%");
+                    ->orWhere('source', 'like', "%{$keyword}%")
+                    ->orWhere('keyword', 'like', "%{$keyword}%");
 
             });
 
         }
 
         return $query
-
             ->latest('published_at')
-
             ->paginate($perPage);
+    }
+
+    /**
+     * Count today's articles.
+     */
+    public function countToday(): int
+    {
+        return $this->query()
+
+            ->whereDate(
+                'scraped_at',
+                Carbon::today()
+            )
+
+            ->count();
     }
 }

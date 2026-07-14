@@ -12,8 +12,12 @@ class ArticleController extends BaseApiController
 {
     public function __construct(
         private readonly ArticleService $service
-    ) {}
+    ) {
+    }
 
+    /**
+     * GET /articles
+     */
     public function index(Request $request)
     {
         $articles = $this->service->search(
@@ -22,18 +26,15 @@ class ArticleController extends BaseApiController
 
             [
 
-                'status'=>$request->status,
+                'status' => $request->status,
 
-                'source'=>$request->source,
+                'source' => $request->source,
 
-                'country'=>$request->country,
+                'country' => $request->country,
 
             ],
 
-            $request->integer(
-                'per_page',
-                20
-            )
+            $request->integer('per_page', 20)
 
         );
 
@@ -46,6 +47,9 @@ class ArticleController extends BaseApiController
         );
     }
 
+    /**
+     * POST /articles
+     */
     public function store(
         StoreArticleRequest $request
     ) {
@@ -58,11 +62,8 @@ class ArticleController extends BaseApiController
         if (!$article) {
 
             return $this->error(
-
                 'Article already exists.',
-
                 409
-
             );
 
         }
@@ -74,6 +75,5 @@ class ArticleController extends BaseApiController
             )
 
         );
-
     }
 }
