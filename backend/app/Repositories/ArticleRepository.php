@@ -2,190 +2,74 @@
 
 namespace App\Repositories;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Article;
+use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-abstract class BaseRepository
+class ArticleRepository extends BaseRepository
 {
-    protected Model $model;
-
-    public function __construct(Model $model)
-    {
-        $this->model = $model;
+    public function __construct(
+        Article $article
+    ) {
+        parent::__construct($article);
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Create
-    |--------------------------------------------------------------------------
-    */
-
-    public function create(array $data): Model
+    public function findByHash(string $hash): ?Article
     {
-        return $this->model->create($data);
+        return $this->findBy(
+            'url_hash',
+            $hash
+        );
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Read
-    |--------------------------------------------------------------------------
-    */
+    public function latestArticles(
+        int $perPage = 20
+    ): LengthAwarePaginator {
 
-    public function all(): Collection
-    {
-        return $this->model->all();
-    }
+        return $this->query()
 
-    public function latest(int $limit = 20): Collection
-    {
-        return $this->model
-            ->latest()
-            ->limit($limit)
-            ->get();
-    }
+            ->latest('published_at')
 
-    public function paginate(int $perPage = 15): LengthAwarePaginator
-    {
-        return $this->model
-            ->latest()
             ->paginate($perPage);
+
     }
 
-    public function findById(int $id): ?Model
+    public function countToday(): int
     {
-        return $this->model->find($id);
+        return $this->query()
+
+            ->whereDate(
+                'scraped_at',
+                Carbon::today()
+            )
+
+            ->count();
     }
 
-    public function findByUuid(string $uuid): ?Model
-    {
-        return $this->model
-            ->where('uuid', $uuid)
-            ->first();
-    }
+    public function searchArticles(
+        ?string $keyword,
+        array $filters = [],
+        int $perPage = 20
+    ): LengthAwarePaginator {
 
-    public function findOrFail(int $id): Model
-    {
-        return $this->model->findOrFail($id);
-    }
+        $query = $this->filterQuery($filters);
 
-    public function first(): ?Model
-    {
-        return $this->model->first();
-    }
+        if (!empty($keyword)) {
 
-    public function firstOrFail(): Model
-    {
-        return $this->model->firstOrFail();
-    }
+            $query->where(function ($q) use ($keyword) {
 
-    /*
-    |--------------------------------------------------------------------------
-    | Generic Query
-    |--------------------------------------------------------------------------
-    */
+                $q->where('title', 'like', "%{$keyword}%")
+                  ->orWhere('source', 'like', "%{$keyword}%")
+                  ->orWhere('keyword', 'like', "%{$keyword}%");
 
-    public function findBy(
-        string $column,
-        mixed $value
-    ): ?Model {
+            });
 
-        return $this->model
-            ->where($column, $value)
-            ->first();
+        }
 
-    }
+        return $query
 
-    public function findAllBy(
-        string $column,
-        mixed $value
-    ): Collection {
+            ->latest('published_at')
 
-        return $this->model
-            ->where($column, $value)
-            ->get();
-
-    }
-
-    public function existsBy(
-        string $column,
-        mixed $value
-    ): bool {
-
-        return $this->model
-            ->where($column, $value)
-            ->exists();
-
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Update
-    |--------------------------------------------------------------------------
-    */
-
-    public function update(
-        Model $model,
-        array $data
-    ): bool {
-
-        return $model->update($data);
-
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Delete
-    |--------------------------------------------------------------------------
-    */
-
-    public function delete(Model $model): bool
-    {
-        return $model->delete();
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Count
-    |--------------------------------------------------------------------------
-    */
-
-    public function count(): int
-    {
-        return $this->model->count();
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Sorting
-    |--------------------------------------------------------------------------
-    */
-
-    public function orderBy(
-        string $column,
-        string $direction = 'asc'
-    ): Collection {
-
-        return $this->model
-            ->orderBy($column, $direction)
-            ->get();
-
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Search
-    |--------------------------------------------------------------------------
-    */
-
-    public function search(
-        string $column,
-        string $keyword
-    ): Collection {
-
-        return $this->model
-            ->where($column, 'LIKE', "%{$keyword}%")
-            ->get();
-
+            ->paginate($perPage);
     }
 }

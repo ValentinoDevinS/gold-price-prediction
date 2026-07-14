@@ -6,6 +6,8 @@ use App\Enums\ArticleStatus;
 
 class Article extends BaseModel
 {
+    protected $table = 'articles';
+
     protected $fillable = [
 
         'uuid',
@@ -43,6 +45,12 @@ class Article extends BaseModel
         'status' => ArticleStatus::class,
 
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function fullArticle()
     {

@@ -4,32 +4,54 @@ namespace App\Services;
 
 use App\Helpers\HashHelper;
 use App\Repositories\ArticleRepository;
-use Illuminate\Support\Facades\DB;
 
-class ArticleService
+class ArticleService extends BaseService
 {
     public function __construct(
         private readonly ArticleRepository $repository
-    ) {
-    }
+    ) {}
 
-    public function register(array $data)
+    public function create(array $data)
     {
-        return DB::transaction(function () use ($data) {
+        return $this->execute(function () use ($data) {
 
-            $data['url_hash'] = HashHelper::generate($data['url']);
+            $data['url_hash'] =
+                HashHelper::generate(
+                    $data['url']
+                );
 
-            if ($this->repository->findByHash($data['url_hash'])) {
+            if (
+                $this->repository
+                    ->findByHash($data['url_hash'])
+            ) {
+
                 return null;
+
             }
 
-            return $this->repository->create($data);
+            return $this->repository
+                ->create($data);
 
         });
     }
 
-    public function list(int $perPage = 15)
-    {
-        return $this->repository->paginate($perPage);
+    public function list(
+        int $perPage = 20
+    ) {
+        return $this->repository
+            ->latestArticles($perPage);
+    }
+
+    public function search(
+        ?string $keyword,
+        array $filters,
+        int $perPage = 20
+    ) {
+        return $this->repository
+            ->searchArticles(
+                $keyword,
+                $filters,
+                $perPage
+            );
     }
 }

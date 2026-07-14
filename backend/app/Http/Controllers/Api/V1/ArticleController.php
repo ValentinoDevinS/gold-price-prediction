@@ -2,38 +2,78 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Helpers\ApiResponse;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\BaseApiController;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Resources\ArticleResource;
 use App\Services\ArticleService;
+use Illuminate\Http\Request;
 
-class ArticleController extends Controller
+class ArticleController extends BaseApiController
 {
     public function __construct(
-        private readonly ArticleService $articleService
-    ) {
+        private readonly ArticleService $service
+    ) {}
+
+    public function index(Request $request)
+    {
+        $articles = $this->service->search(
+
+            $request->keyword,
+
+            [
+
+                'status'=>$request->status,
+
+                'source'=>$request->source,
+
+                'country'=>$request->country,
+
+            ],
+
+            $request->integer(
+                'per_page',
+                20
+            )
+
+        );
+
+        return $this->success(
+
+            ArticleResource::collection(
+                $articles
+            )
+
+        );
     }
 
-    public function store(StoreArticleRequest $request)
-    {
-        $article = $this->articleService->register(
-            $request->validated()
-        );
+    public function store(
+        StoreArticleRequest $request
+    ) {
+
+        $article = $this->service
+            ->create(
+                $request->validated()
+            );
 
         if (!$article) {
 
-            return ApiResponse::error(
+            return $this->error(
+
                 'Article already exists.',
+
                 409
+
             );
 
         }
 
-        return ApiResponse::success(
-            new ArticleResource($article),
-            'Article created successfully.',
-            201
+        return $this->created(
+
+            new ArticleResource(
+                $article
+            )
+
         );
+
     }
 }

@@ -1,10 +1,3 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
-Route::prefix('v1')
-    ->prefix('ai')
-    ->group(function () {
-
-        //
-    });
+require __DIR__.'/web/articles.php';
