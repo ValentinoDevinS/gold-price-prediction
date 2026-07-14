@@ -10,7 +10,43 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseRepository implements RepositoryInterface
 {
-    protected readonly Model $model;
+    protected Model $model;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Defaults
+    |--------------------------------------------------------------------------
+    */
+
+    protected const DEFAULT_PER_PAGE = 20;
+
+    protected const MAX_PER_PAGE = 100;
+
+    protected const DEFAULT_SORT = 'created_at';
+
+    protected const DEFAULT_DIRECTION = 'desc';
+
+    /*
+    |--------------------------------------------------------------------------
+    | Configuration
+    |--------------------------------------------------------------------------
+    */
+
+    protected array $searchable = [];
+
+    protected array $filterable = [];
+
+    protected array $sortable = [];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Repository Defaults
+    |--------------------------------------------------------------------------
+    */
+
+    protected string $defaultSort = self::DEFAULT_SORT;
+
+    protected string $defaultDirection = self::DEFAULT_DIRECTION;
 
     public function __construct(Model $model)
     {
@@ -60,22 +96,29 @@ abstract class BaseRepository implements RepositoryInterface
     public function latest(int $limit = 20): Collection
     {
         return $this->query()
-            ->latest()
+            ->latest($this->defaultSort)
             ->limit($limit)
             ->get();
     }
 
-    public function paginate(int $perPage = 15): LengthAwarePaginator
-    {
+    public function paginate(
+        int $perPage = self::DEFAULT_PER_PAGE
+    ): LengthAwarePaginator{
+
+        $perPage = $this->sanitizePerPage($perPage);
         return $this->query()
-            ->latest()
-            ->paginate($perPage);
+            ->latest($this->defaultSort)
+            ->paginate();
     }
 
     public function findById(int $id): ?Model
     {
         return $this->model->find($id);
     }
+
+    /**
+     * Find a model by UUID.
+     */
 
     public function findByUuid(string $uuid): ?Model
     {
@@ -142,26 +185,49 @@ abstract class BaseRepository implements RepositoryInterface
     |--------------------------------------------------------------------------
     */
 
-    protected function searchQuery(
-        array $columns,
-        string $keyword
-    ): Builder {
+    protected function applySearch(
+        Builder $query,
+        ?string $keyword
+    ): Builder
+    {
+        $keyword = trim((string) $keyword);
 
+        if (
+            $keyword === '' ||
+            empty($this->searchable)
+        ) {
+            return $query;
+        }
+
+        return $query->where(function (
+            Builder $builder
+        ) use ($keyword) {
+
+            foreach ($this->searchable as $column) {
+
+                $builder->orWhere(
+                    $column,
+                    'LIKE',
+                    "%{$keyword}%"
+                );
+
+            }
+
+        });
+    }
+
+    public function findOrFailByUuid(
+        string $uuid
+    ): Model
+    {
         return $this->query()
-            ->where(function ($query) use ($columns, $keyword) {
 
-                foreach ($columns as $column) {
+            ->where(
+                'uuid',
+                $uuid
+            )
 
-                    $query->orWhere(
-                        $column,
-                        'LIKE',
-                        "%{$keyword}%"
-                    );
-
-                }
-
-            });
-
+            ->firstOrFail();
     }
 
     /*
@@ -170,23 +236,167 @@ abstract class BaseRepository implements RepositoryInterface
     |--------------------------------------------------------------------------
     */
 
-    protected function filterQuery(
+    protected function applyFilters(
+        Builder $query,
         array $filters
-    ): Builder {
-
-        $query = $this->query();
-
+    ): Builder
+    {
         foreach ($filters as $column => $value) {
 
             if ($value === null || $value === '') {
                 continue;
             }
 
-            $query->where($column, $value);
+            if (! in_array(
+                $column,
+                $this->filterable,
+                true
+            )) {
+                continue;
+            }
+
+            if (is_array($value)) {
+
+                $query->whereIn(
+                    $column,
+                    $value
+                );
+
+                continue;
+
+            }
+
+            $query->where(
+                $column,
+                $value
+            );
 
         }
 
         return $query;
+    }
 
+    protected function applySorting(
+        Builder $query,
+        ?string $sort,
+        ?string $direction
+    ): Builder
+    {
+        $sort ??= $this->defaultSort;
+
+        $direction ??= $this->defaultDirection; 
+
+        if (
+            ! in_array(
+                $sort,
+                $this->sortable,
+                true
+            )
+        ) {
+
+            $sort = $this->defaultSort;
+
+        }
+
+        if (
+            ! in_array(
+                strtolower($direction),
+                ['asc', 'desc'],
+                true
+            )
+        ) {
+
+            $direction = $this->defaultDirection;
+
+        }
+
+        return $query->orderBy(
+            $sort,
+            $direction
+        );
+    }
+
+    protected function sanitizePerPage(
+        int $perPage
+    ): int
+    {
+        return max(
+            1,
+            min(
+                $perPage,
+                self::MAX_PER_PAGE
+            )
+        );
+    }
+
+    public function queryList(
+        array $filters = [],
+        ?string $search = null,
+        ?string $sort = null,
+        ?string $direction = null
+    ): Builder
+    {
+        $query = $this->query();
+
+        $query = $this->applySearch(
+            $query,
+            $search
+        );
+
+        $query = $this->applyFilters(
+            $query,
+            $filters
+        );
+
+        return $this->applySorting(
+            $query,
+            $sort,
+            $direction
+        );
+    }
+
+    public function getPaginated(
+        array $filters = [],
+        ?string $search = null,
+        ?string $sort = self::DEFAULT_SORT,
+        ?string $direction = self::DEFAULT_DIRECTION,
+        int $perPage = self::DEFAULT_PER_PAGE
+    ): LengthAwarePaginator
+    {
+        $perPage = $this->sanitizePerPage(
+            $perPage
+        );
+
+        return $this->queryList(
+            $filters,
+            $search,
+            $sort,
+            $direction
+        )->paginate($perPage);
+    }
+
+    public function exists(
+        array $conditions
+    ): bool
+    {
+        if (empty($conditions)) {
+            return false;
+        }
+        
+        $query = $this->query();
+
+        foreach (
+            $conditions as
+            $column => $value
+        ) {
+
+            $query->where(
+                $column,
+                $value
+            );
+
+        }
+
+        return $query->exists();
     }
 }

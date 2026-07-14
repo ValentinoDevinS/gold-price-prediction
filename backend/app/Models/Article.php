@@ -1,23 +1,59 @@
 <?php
 
-namespace App\Observers;
+namespace App\Models;
 
-use App\Models\Article;
+use App\Enums\ArticleStatus;
 
-class ArticleObserver
+class Article extends BaseModel
 {
-    public function created(Article $article): void
-    {
-        // TODO:
-    }
+    protected $table = 'articles';
 
-    public function updated(Article $article): void
-    {
-        // TODO:
-    }
+    protected $fillable = [
 
-    public function deleted(Article $article): void
+        'uuid',
+
+        'title',
+
+        'url',
+
+        'url_hash',
+
+        'source',
+
+        'published_at',
+
+        'language',
+
+        'country',
+
+        'keyword',
+
+        'scraper',
+
+        'status',
+
+        'scraped_at',
+
+    ];
+
+    protected $casts = [
+
+        'published_at' => 'datetime',
+
+        'scraped_at' => 'datetime',
+
+        'status' => ArticleStatus::class,
+
+    ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
+    public function fullArticle()
     {
-        // TODO:
+        return $this->hasOne(FullArticle::class);
     }
 }
