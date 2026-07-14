@@ -10,10 +10,8 @@ trait HasUuid
     {
         static::creating(function ($model) {
 
-            if (!$model->uuid) {
-
+            if (empty($model->uuid)) {
                 $model->uuid = (string) Str::uuid();
-
             }
 
         });
