@@ -17,25 +17,40 @@ return new class extends Migration
 
             $table->uuid('uuid')->unique();
 
-            $table->string('model_name');
+            $table->string('model_name',100);
 
-            $table->string('model_version');
+            $table->string('model_version',20);
 
-            $table->enum('model_type', [
+            $table->enum('model_type',[
                 'LSTM',
                 'CNN',
                 'ANN'
             ]);
 
+            $table->enum('status',[
+                'ACTIVE',
+                'INACTIVE',
+                'ARCHIVED'
+            ])->default('INACTIVE');
+
+            $table->date('trained_from');
+
+            $table->date('trained_until');
+
+            $table->integer('dataset_size');
+
+            $table->decimal('training_time',10,2);
+
+            $table->string('model_hash',64)->unique();
+
             $table->string('model_path');
 
             $table->string('scaler_path')->nullable();
 
-            $table->boolean('is_active')->default(false);
-
             $table->text('description')->nullable();
 
             $table->timestamps();
+
         });
     }
 
