@@ -2,48 +2,38 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreArticleRequest;
+use App\Http\Resources\ArticleResource;
+use App\Services\ArticleService;
 
 class ArticleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function __construct(
+        private readonly ArticleService $articleService
+    ) {
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreArticleRequest $request)
     {
-        //
-    }
+        $article = $this->articleService->register(
+            $request->validated()
+        );
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        if (!$article) {
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+            return ApiResponse::error(
+                'Article already exists.',
+                409
+            );
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        }
+
+        return ApiResponse::success(
+            new ArticleResource($article),
+            'Article created successfully.',
+            201
+        );
     }
 }

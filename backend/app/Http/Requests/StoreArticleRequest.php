@@ -7,39 +7,36 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreArticleRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
 
-            'title'=>'required|string|max:500',
+            'title' => 'required|string|max:500',
 
-            'url'=>'required|url',
+            'url' => 'required|url|max:2000',
 
-            'source'=>'required|string',
+            'source' => 'required|string|max:100',
 
-            'published_at'=>'nullable|date',
+            'published_at' => 'nullable|date',
 
-            'language'=>'required|string',
+            'language' => 'required|string|max:20',
 
-            'country'=>'nullable|string',
+            'country' => 'nullable|string|max:50',
 
-            'keyword'=>'required|string',
+            'keyword' => 'required|string|max:100',
 
-            'scraper'=>'required|string'
+            'scraper' => 'required|string|max:100',
+
+            'scraped_at' => 'required|date',
 
         ];
     }
+
+    
 }

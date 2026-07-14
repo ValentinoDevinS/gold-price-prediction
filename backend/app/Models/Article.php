@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\ArticleStatus;
+
 class Article extends BaseModel
 {
     protected $fillable = [
@@ -11,6 +13,8 @@ class Article extends BaseModel
         'title',
 
         'url',
+
+        'url_hash',
 
         'source',
 
@@ -26,15 +30,17 @@ class Article extends BaseModel
 
         'status',
 
-        'scraped_at'
+        'scraped_at',
 
     ];
 
     protected $casts = [
 
-        'published_at'=>'datetime',
+        'published_at' => 'datetime',
 
-        'scraped_at'=>'datetime'
+        'scraped_at' => 'datetime',
+
+        'status' => ArticleStatus::class,
 
     ];
 

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\HashHelper;
 use App\Repositories\ArticleRepository;
 use Illuminate\Support\Facades\DB;
 
@@ -16,12 +17,19 @@ class ArticleService
     {
         return DB::transaction(function () use ($data) {
 
-            if ($this->repository->findByUrl($data['url'])) {
+            $data['url_hash'] = HashHelper::generate($data['url']);
+
+            if ($this->repository->findByHash($data['url_hash'])) {
                 return null;
             }
 
             return $this->repository->create($data);
 
         });
+    }
+
+    public function list(int $perPage = 15)
+    {
+        return $this->repository->paginate($perPage);
     }
 }
