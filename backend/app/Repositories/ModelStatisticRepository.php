@@ -77,19 +77,32 @@ class ModelStatisticRepository extends BaseRepository
     }
 
     /**
-     * Leaderboard ordered by ranking.
+     * Get leaderboard ordered by ranking.
      */
     public function getLeaderboard(): Collection
     {
+        return $this->model
+            ->orderBy('ranking_position')
+            ->get();
+    }
+
+    /**
+     * Get current statistic by ranking.
+     */
+    public function getByRankingPosition(
+        int $rankingPosition
+    ): ?ModelStatistic {
+
         return
 
             $this->model
 
-                ->orderBy(
-                    'ranking_position'
+                ->where(
+                    'ranking_position',
+                    $rankingPosition
                 )
 
-                ->get();
+                ->first();
 
     }
 

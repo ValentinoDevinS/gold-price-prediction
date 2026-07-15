@@ -24,5 +24,6 @@ Route::prefix('v1/ai')
 
         require __DIR__.'/api/model_statistics.php';
 
+        require __DIR__.'/api/model_statistic_histories.php';
         
     });

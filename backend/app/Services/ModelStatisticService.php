@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\ModelStatistic;
 use App\Models\PredictionResult;
+use App\Services\ModelStatisticHistoryService;
 use App\Repositories\ModelStatisticRepository;
 use App\Repositories\PredictionEvaluationRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -14,6 +15,7 @@ class ModelStatisticService extends BaseService
     public function __construct(
         private readonly ModelStatisticRepository $repository,
         private readonly PredictionEvaluationRepository $evaluationRepository,
+        private readonly ModelStatisticHistoryService $historyService,
     ) {
     }
 
@@ -88,6 +90,9 @@ class ModelStatisticService extends BaseService
             }
 
             $this->updateLeaderboard();
+
+            $this->historyService
+                ->createSnapshot();
 
         });
     }
