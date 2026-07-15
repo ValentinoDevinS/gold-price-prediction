@@ -57,6 +57,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('model_registries');
+        Schema::dropIfExists('ml_models');
     }
 };

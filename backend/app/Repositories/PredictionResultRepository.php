@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\PredictionResult;
+use Illuminate\Database\Eloquent\Collection;
 
 class PredictionResultRepository extends BaseRepository
 {
@@ -44,5 +45,26 @@ class PredictionResultRepository extends BaseRepository
         PredictionResult $model
     ) {
         parent::__construct($model);
+    }
+
+    /**
+     * Get all predictions for one Feature Snapshot.
+     */
+    public function getByFeatureSnapshotId(
+        int $featureSnapshotId
+    ): Collection {
+
+        return
+
+            $this->model
+                ->where(
+                    'feature_snapshot_id',
+                    $featureSnapshotId
+                )
+                ->orderBy(
+                    'model_name'
+                )
+                ->get();
+
     }
 }

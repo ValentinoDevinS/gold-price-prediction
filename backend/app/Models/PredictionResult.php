@@ -36,6 +36,22 @@ class PredictionResult extends BaseModel
 
     ];
 
+    /**
+     * Required prediction models before ensemble generation.
+     */
+    public static function requiredModels(): array
+    {
+        return [
+
+            self::MODEL_LSTM,
+
+            self::MODEL_CNN,
+
+            self::MODEL_ANN,
+
+        ];
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Table

@@ -20,4 +20,9 @@ Route::prefix('v1/ai')
 
         require __DIR__.'/api/ensemble_results.php';
 
+        require __DIR__.'/api/prediction_evaluations.php';
+
+        require __DIR__.'/api/model_statistics.php';
+
+        
     });
