@@ -7,7 +7,17 @@ Route::prefix('v1/ai')
     ->group(function () {
 
         require __DIR__.'/api/articles.php';
-        // require __DIR__.'/api/full_articles.php';
-        // require __DIR__.'/api/predictions.php';
-        // require __DIR__.'/api/ml_models.php';
+
+        require __DIR__.'/api/full_articles.php';
+
+        require __DIR__.'/api/clean_articles.php';
+
+        require __DIR__.'/api/sentiment_analyses.php';
+
+        require __DIR__.'/api/feature_snapshots.php';
+
+        require __DIR__.'/api/prediction_results.php';
+
+        require __DIR__.'/api/ensemble_results.php';
+
     });

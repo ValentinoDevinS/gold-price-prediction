@@ -1,0 +1,168 @@
+[90m= [39m[34;4mApp\Models\FeatureSnapshot[39;24m {#7444
+    [34mid[39m: [35m1[39m,
+    [34muuid[39m: [32m"[39m[32maffd8cb9-afac-4fbd-a237-7e297a56f82a[39m[32m"[39m,
+    [34msentiment_analysis_id[39m: [35m1[39m,
+    [34mpositive_score[39m: [32m"[39m[32m0.645955[39m[32m"[39m,
+    [34mneutral_score[39m: [32m"[39m[32m0.012296[39m[32m"[39m,
+    [34mnegative_score[39m: [32m"[39m[32m0.341749[39m[32m"[39m,
+    [34mword_count[39m: [35m616[39m,
+    [34marticle_count[39m: [35m2[39m,
+    [34maverage_sentiment[39m: [32m"[39m[32m0.645955[39m[32m"[39m,
+    [34mrolling_sentiment_3d[39m: [32m"[39m[32m0.377647[39m[32m"[39m,
+    [34mrolling_sentiment_7d[39m: [32m"[39m[32m0.488490[39m[32m"[39m,
+    [34mrolling_sentiment_14d[39m: [32m"[39m[32m0.761469[39m[32m"[39m,
+    [34mweekday[39m: [35m2[39m,
+    [34mmonth[39m: [35m7[39m,
+    [34mquarter[39m: [35m3[39m,
+    [34mis_weekend[39m: [35m0[39m,
+    [34mgold_price[39m: [32m"[39m[32m3104.59[39m[32m"[39m,
+    [34mgold_change_percent[39m: [32m"[39m[32m0.7946[39m[32m"[39m,
+    [34musd_index[39m: [36mnull[39m,
+    [34metf_flow[39m: [36mnull[39m,
+    [34mtrading_volume[39m: [36mnull[39m,
+    [34mfeature_version[39m: [32m"[39m[32m1.0[39m[32m"[39m,
+    [34msnapshot_date[39m: [32m"[39m[32m2026-07-14[39m[32m"[39m,
+    [34mgenerated_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+    [34mcreated_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+    [34mupdated_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+    [34msentimentAnalysis[39m: [34;4mApp\Models\SentimentAnalysis[39;24m {#8675
+      [34mid[39m: [35m1[39m,
+      [34muuid[39m: [32m"[39m[32m4598134f-8aa9-4841-bf22-a41dbdd6c55e[39m[32m"[39m,
+      [34mclean_article_id[39m: [35m1[39m,
+      [34mpositive_score[39m: [32m"[39m[32m0.645955[39m[32m"[39m,
+      [34mneutral_score[39m: [32m"[39m[32m0.012296[39m[32m"[39m,
+      [34mnegative_score[39m: [32m"[39m[32m0.341749[39m[32m"[39m,
+      [34msentiment_label[39m: [32m"[39m[32mpositive[39m[32m"[39m,
+      [34mmodel_name[39m: [32m"[39m[32mProsusAI/finbert[39m[32m"[39m,
+      [34mmodel_version[39m: [32m"[39m[32m1.0[39m[32m"[39m,
+      [34manalyzed_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+      [34mcreated_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+      [34mupdated_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+      [34mcleanArticle[39m: [34;4mApp\Models\CleanArticle[39;24m {#8715
+        [34mid[39m: [35m1[39m,
+        [34muuid[39m: [32m"[39m[32mf63d5273-ca7b-40f6-b988-2491843db5f3[39m[32m"[39m,
+        [34mfull_article_id[39m: [35m1[39m,
+        [34mclean_content[39m: <<<[32mEOS[39m
+          [32mQuas velit voluptatem non suscipit molestias dolorum. Est sequi pariatur blanditiis impedit ut ad quae. Ut atque quo voluptas nisi.[39m
+          
+          [32mMinima ut repellendus autem quia odio. Voluptatibus qui quo aspernatur. Itaque vel dolor ut similique.[39m
+          
+          [32mCum aut quidem dolorem odit et. Et necessitatibus voluptas est quia et.[39m
+          
+          [32mEt voluptatem corporis error quos. Dignissimos repellat molestiae quo possimus. Quod ducimus occaecati non. Voluptatibus corrupti quo numquam nisi.[39m
+          
+          [32mQuas fugit voluptatem consequatur natus non. Ducimus dolorum deserunt aut est qui qui.[39m
+          
+          [32mEt aut ullam sequi et repellendus sint. Aspernatur at facilis architecto nisi quia iste. Sapiente repudiandae ipsa corrupti ipsum fuga quia ex aperiam. Optio doloribus et accusamus dolorum odio accusamus.[39m
+          
+          [32mExplicabo numquam vero veniam aut ipsam ab fuga eligendi. Aut aperiam natus fuga aut aut tenetur. Sapiente ea aliquid harum voluptatibus molestiae ad. Voluptatem occaecati omnis occaecati vitae voluptatum molestiae id. Quia repellat cupiditate est hic aut voluptate.[39m
+          
+          [32mOmnis nisi similique ipsam ut. Excepturi ut aliquam qui hic quasi. Temporibus minima non similique amet praesentium. Et molestiae delectus molestiae explicabo distinctio non dolorum.[39m
+          
+          [32mCupiditate beatae quisquam et illum. Quam et consequuntur dolor molestiae esse numquam. Id alias facere exercitationem possimus ut ut odit. Aut nesciunt eos explicabo non aut veniam eum magni.[39m
+          
+          [32mEum et molestias hic expedita aut labore. Quisquam voluptatem inventore ea dolore aut culpa saepe quia. Reprehenderit nisi qui laboriosam et deserunt nesciunt consequatur. Iste harum repellat veniam est voluptate ut.[39m
+          
+          [32mDeleniti cumque consequatur ut et. Suscipit quibusdam eius nihil officia accusantium sequi sed. Quibusdam nemo aliquid qui consequuntur dolor similique dolore.[39m
+          
+          [32mEum rerum corporis sit occaecati distinctio necessitatibus. Sit voluptates totam quia eos cumque. Impedit ipsum labore dolorem mollitia. Quo tempore qui consequatur quia harum sed.[39m
+          
+          [32mEt ut temporibus at quia facere vel vero rerum. Quo fugiat repellat autem sed temporibus. Ut cumque et qui voluptatem. Modi et reprehenderit dolorum eos quidem.[39m
+          
+          [32mSit quae ut atque illo animi eum. Debitis qui aperiam tenetur doloribus iste consectetur velit. Quia culpa sit quibusdam maxime nisi.[39m
+          
+          [32mDoloribus aliquam est est sed. Sequi accusantium perspiciatis fugiat et. Voluptatem aut reprehenderit architecto aut. Sequi sint corporis architecto laborum tempora voluptas earum.[39m
+          [32mEOS[39m,
+        [34moriginal_word_count[39m: [35m1121[39m,
+        [34mclean_word_count[39m: [35m1816[39m,
+        [34mcleaner_version[39m: [32m"[39m[32m1.0[39m[32m"[39m,
+        [34mcleaned_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+        [34mcreated_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+        [34mupdated_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+      },
+    },
+  }
+[90m= [39m[34;4mApp\Models\FeatureSnapshot[39;24m {#7444
+    [34mid[39m: [35m1[39m,
+    [34muuid[39m: [32m"[39m[32maffd8cb9-afac-4fbd-a237-7e297a56f82a[39m[32m"[39m,
+    [34msentiment_analysis_id[39m: [35m1[39m,
+    [34mpositive_score[39m: [32m"[39m[32m0.645955[39m[32m"[39m,
+    [34mneutral_score[39m: [32m"[39m[32m0.012296[39m[32m"[39m,
+    [34mnegative_score[39m: [32m"[39m[32m0.341749[39m[32m"[39m,
+    [34mword_count[39m: [35m616[39m,
+    [34marticle_count[39m: [35m2[39m,
+    [34maverage_sentiment[39m: [32m"[39m[32m0.645955[39m[32m"[39m,
+    [34mrolling_sentiment_3d[39m: [32m"[39m[32m0.377647[39m[32m"[39m,
+    [34mrolling_sentiment_7d[39m: [32m"[39m[32m0.488490[39m[32m"[39m,
+    [34mrolling_sentiment_14d[39m: [32m"[39m[32m0.761469[39m[32m"[39m,
+    [34mweekday[39m: [35m2[39m,
+    [34mmonth[39m: [35m7[39m,
+    [34mquarter[39m: [35m3[39m,
+    [34mis_weekend[39m: [35m0[39m,
+    [34mgold_price[39m: [32m"[39m[32m3104.59[39m[32m"[39m,
+    [34mgold_change_percent[39m: [32m"[39m[32m0.7946[39m[32m"[39m,
+    [34musd_index[39m: [36mnull[39m,
+    [34metf_flow[39m: [36mnull[39m,
+    [34mtrading_volume[39m: [36mnull[39m,
+    [34mfeature_version[39m: [32m"[39m[32m1.0[39m[32m"[39m,
+    [34msnapshot_date[39m: [32m"[39m[32m2026-07-14[39m[32m"[39m,
+    [34mgenerated_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+    [34mcreated_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+    [34mupdated_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+    [34msentimentAnalysis[39m: [34;4mApp\Models\SentimentAnalysis[39;24m {#8675
+      [34mid[39m: [35m1[39m,
+      [34muuid[39m: [32m"[39m[32m4598134f-8aa9-4841-bf22-a41dbdd6c55e[39m[32m"[39m,
+      [34mclean_article_id[39m: [35m1[39m,
+      [34mpositive_score[39m: [32m"[39m[32m0.645955[39m[32m"[39m,
+      [34mneutral_score[39m: [32m"[39m[32m0.012296[39m[32m"[39m,
+      [34mnegative_score[39m: [32m"[39m[32m0.341749[39m[32m"[39m,
+      [34msentiment_label[39m: [32m"[39m[32mpositive[39m[32m"[39m,
+      [34mmodel_name[39m: [32m"[39m[32mProsusAI/finbert[39m[32m"[39m,
+      [34mmodel_version[39m: [32m"[39m[32m1.0[39m[32m"[39m,
+      [34manalyzed_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+      [34mcreated_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+      [34mupdated_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+      [34mcleanArticle[39m: [34;4mApp\Models\CleanArticle[39;24m {#8715
+        [34mid[39m: [35m1[39m,
+        [34muuid[39m: [32m"[39m[32mf63d5273-ca7b-40f6-b988-2491843db5f3[39m[32m"[39m,
+        [34mfull_article_id[39m: [35m1[39m,
+        [34mclean_content[39m: <<<[32mEOS[39m
+          [32mQuas velit voluptatem non suscipit molestias dolorum. Est sequi pariatur blanditiis impedit ut ad quae. Ut atque quo voluptas nisi.[39m
+          
+          [32mMinima ut repellendus autem quia odio. Voluptatibus qui quo aspernatur. Itaque vel dolor ut similique.[39m
+          
+          [32mCum aut quidem dolorem odit et. Et necessitatibus voluptas est quia et.[39m
+          
+          [32mEt voluptatem corporis error quos. Dignissimos repellat molestiae quo possimus. Quod ducimus occaecati non. Voluptatibus corrupti quo numquam nisi.[39m
+          
+          [32mQuas fugit voluptatem consequatur natus non. Ducimus dolorum deserunt aut est qui qui.[39m
+          
+          [32mEt aut ullam sequi et repellendus sint. Aspernatur at facilis architecto nisi quia iste. Sapiente repudiandae ipsa corrupti ipsum fuga quia ex aperiam. Optio doloribus et accusamus dolorum odio accusamus.[39m
+          
+          [32mExplicabo numquam vero veniam aut ipsam ab fuga eligendi. Aut aperiam natus fuga aut aut tenetur. Sapiente ea aliquid harum voluptatibus molestiae ad. Voluptatem occaecati omnis occaecati vitae voluptatum molestiae id. Quia repellat cupiditate est hic aut voluptate.[39m
+          
+          [32mOmnis nisi similique ipsam ut. Excepturi ut aliquam qui hic quasi. Temporibus minima non similique amet praesentium. Et molestiae delectus molestiae explicabo distinctio non dolorum.[39m
+          
+          [32mCupiditate beatae quisquam et illum. Quam et consequuntur dolor molestiae esse numquam. Id alias facere exercitationem possimus ut ut odit. Aut nesciunt eos explicabo non aut veniam eum magni.[39m
+          
+          [32mEum et molestias hic expedita aut labore. Quisquam voluptatem inventore ea dolore aut culpa saepe quia. Reprehenderit nisi qui laboriosam et deserunt nesciunt consequatur. Iste harum repellat veniam est voluptate ut.[39m
+          
+          [32mDeleniti cumque consequatur ut et. Suscipit quibusdam eius nihil officia accusantium sequi sed. Quibusdam nemo aliquid qui consequuntur dolor similique dolore.[39m
+          
+          [32mEum rerum corporis sit occaecati distinctio necessitatibus. Sit voluptates totam quia eos cumque. Impedit ipsum labore dolorem mollitia. Quo tempore qui consequatur quia harum sed.[39m
+          
+          [32mEt ut temporibus at quia facere vel vero rerum. Quo fugiat repellat autem sed temporibus. Ut cumque et qui voluptatem. Modi et reprehenderit dolorum eos quidem.[39m
+          
+          [32mSit quae ut atque illo animi eum. Debitis qui aperiam tenetur doloribus iste consectetur velit. Quia culpa sit quibusdam maxime nisi.[39m
+          
+          [32mDoloribus aliquam est est sed. Sequi accusantium perspiciatis fugiat et. Voluptatem aut reprehenderit architecto aut. Sequi sint corporis architecto laborum tempora voluptas earum.[39m
+          [32mEOS[39m,
+        [34moriginal_word_count[39m: [35m1121[39m,
+        [34mclean_word_count[39m: [35m1816[39m,
+        [34mcleaner_version[39m: [32m"[39m[32m1.0[39m[32m"[39m,
+        [34mcleaned_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+        [34mcreated_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+        [34mupdated_at[39m: [32m"[39m[32m2026-07-14 21:51:13[39m[32m"[39m,
+      },
+    },
+  }

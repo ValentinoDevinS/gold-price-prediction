@@ -38,6 +38,10 @@ abstract class BaseRepository implements RepositoryInterface
 
     protected array $sortable = [];
 
+    protected array $with = [];
+
+    protected array $withCount = [];
+
     /*
     |--------------------------------------------------------------------------
     | Repository Defaults
@@ -62,7 +66,14 @@ abstract class BaseRepository implements RepositoryInterface
      */
     protected function query(): Builder
     {
-        return $this->model->newQuery();
+        return $this->model
+        ->newQuery()
+        ->with(
+            $this->with
+        )
+        ->withCount(
+            $this->withCount
+        );
     }
 
     /*
@@ -234,6 +245,34 @@ abstract class BaseRepository implements RepositoryInterface
             )
 
             ->firstOrFail();
+    }
+
+    /**
+     * Retrieve database ID from UUID.
+     */
+    public function getIdByUuid(
+        string $uuid
+    ): int
+    {
+        $id = $this->query()
+
+            ->where(
+                'uuid',
+                $uuid
+            )
+
+            ->value('id');
+
+        if ($id === null) {
+
+            abort(
+                404,
+                'Resource not found.'
+            );
+
+        }
+
+        return (int) $id;
     }
 
     /*
