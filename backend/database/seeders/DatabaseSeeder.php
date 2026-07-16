@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             FeatureSnapshotSeeder::class,
             PredictionResultSeeder::class,
             EnsembleResultSeeder::class,
+            ScheduledJobSeeder::class,
         ]);
     }
 }

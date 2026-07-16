@@ -1,81 +1,124 @@
 <?php
 
-namespace App\Models;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class ModelStatistic extends BaseModel
+return new class extends Migration
 {
-    protected $fillable = [
-
-        'uuid',
-
-        'model_name',
-
-        'ranking_position',
-
-        'total_predictions',
-
-        'best_prediction_count',
-
-        'win_rate',
-
-        'mae',
-
-        'rmse',
-
-        'mape',
-
-        'average_absolute_error',
-
-        'average_percentage_error',
-
-        'difference_from_best',
-
-        'latest_prediction_date',
-
-        'calculated_at',
-
-    ];
-
-    protected function casts(): array
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
-        return [
+        Schema::create('model_statistics', function (Blueprint $table) {
 
-            'ranking_position'
-                => 'integer',
+            $table->id();
 
-            'total_predictions'
-                => 'integer',
+            $table->uuid()->unique();
 
-            'best_prediction_count'
-                => 'integer',
+            /*
+            |--------------------------------------------------------------------------
+            | Model
+            |--------------------------------------------------------------------------
+            */
 
-            'win_rate'
-                => 'decimal:4',
+            $table->string(
+                'model_name'
+            );
 
-            'mae'
-                => 'decimal:6',
+            /*
+            |--------------------------------------------------------------------------
+            | Ranking
+            |--------------------------------------------------------------------------
+            */
 
-            'rmse'
-                => 'decimal:6',
+            $table->unsignedInteger(
+                'ranking_position'
+            );
 
-            'mape'
-                => 'decimal:6',
+            $table->unsignedInteger(
+                'total_predictions'
+            )->default(0);
 
-            'average_absolute_error'
-                => 'decimal:6',
+            $table->unsignedInteger(
+                'best_prediction_count'
+            )->default(0);
 
-            'average_percentage_error'
-                => 'decimal:6',
+            $table->decimal(
+                'win_rate',
+                8,
+                4
+            )->default(0);
 
-            'difference_from_best'
-                => 'decimal:6',
+            /*
+            |--------------------------------------------------------------------------
+            | Metrics
+            |--------------------------------------------------------------------------
+            */
 
-            'latest_prediction_date'
-                => 'date',
+            $table->decimal(
+                'mae',
+                12,
+                6
+            )->default(0);
 
-            'calculated_at'
-                => 'datetime',
+            $table->decimal(
+                'rmse',
+                12,
+                6
+            )->default(0);
 
-        ];
+            $table->decimal(
+                'mape',
+                12,
+                6
+            )->default(0);
+
+            $table->decimal(
+                'average_absolute_error',
+                12,
+                6
+            )->default(0);
+
+            $table->decimal(
+                'average_percentage_error',
+                12,
+                6
+            )->default(0);
+
+            $table->decimal(
+                'difference_from_best',
+                12,
+                6
+            )->default(0);
+
+            /*
+            |--------------------------------------------------------------------------
+            | Dates
+            |--------------------------------------------------------------------------
+            */
+
+            $table->date(
+                'latest_prediction_date'
+            )->nullable();
+
+            $table->timestamp(
+                'calculated_at'
+            )->nullable();
+
+            $table->timestamps();
+
+        });
     }
-}
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists(
+            'model_statistics'
+        );
+    }
+};
