@@ -1,0 +1,5 @@
+<div class="text-xl font-bold">
+
+    {{ config('app.name') }}
+
+</div>
