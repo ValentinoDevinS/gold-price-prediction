@@ -1,32 +1,100 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\Ui\Styles;
 
-use App\Enums\Ui\AlertVariant;
-use App\Support\Ui\ClassBuilder;
+use App\Support\Ui\BaseStyle;
 
-class AlertStyle
+final class AlertStyle extends BaseStyle
 {
-    public function container(AlertVariant $variant): string
+    public function wrapper(): string
     {
-        return ClassBuilder::make()
-            ->add('rounded-lg')
-            ->add('border')
-            ->add('px-4 py-3')
-            ->add(match ($variant) {
+        return $this->builder()
+            ->addMany([
+                'flex',
+                'items-start',
+                'gap-4',
+                'rounded-lg',
+                'border',
+                'p-4',
+                'shadow-sm',
+            ])
+            ->build();
+    }
 
-                AlertVariant::Success =>
-                    'border-green-200 bg-green-50 text-green-800',
+    public function icon(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'mt-0.5',
+                'h-5',
+                'w-5',
+                'shrink-0',
+            ])
+            ->build();
+    }
 
-                AlertVariant::Error =>
-                    'border-red-200 bg-red-50 text-red-800',
+    public function content(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'flex-1',
+                'min-w-0',
+            ])
+            ->build();
+    }
 
-                AlertVariant::Warning =>
-                    'border-yellow-200 bg-yellow-50 text-yellow-800',
+    public function title(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'text-sm',
+                'font-semibold',
+            ])
+            ->build();
+    }
 
-                AlertVariant::Info =>
-                    'border-blue-200 bg-blue-50 text-blue-800',
-            })
+    public function description(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'mt-1',
+                'text-sm',
+                'leading-6',
+            ])
+            ->build();
+    }
+
+    public function actions(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'mt-3',
+                'flex',
+                'items-center',
+                'gap-2',
+            ])
+            ->build();
+    }
+
+    public function closeButton(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'ml-auto',
+                'inline-flex',
+                'h-8',
+                'w-8',
+                'items-center',
+                'justify-center',
+                'rounded-md',
+                'transition-colors',
+                'hover:bg-black/5',
+                'focus:outline-none',
+                'focus:ring-2',
+                'focus:ring-offset-2',
+            ])
             ->build();
     }
 }

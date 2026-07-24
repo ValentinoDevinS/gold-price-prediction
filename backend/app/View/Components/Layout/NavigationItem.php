@@ -2,61 +2,32 @@
 
 declare(strict_types=1);
 
-namespace App\Support\Navigation;
+namespace App\View\Components\Layout;
 
-use App\Data\Layout\NavigationGroup;
-use App\Data\Layout\NavigationItem;
+use App\Data\Layout\NavigationItem as NavigationItemData;
+use App\Support\Layout\Styles\NavigationItemStyle;
+use App\View\Components\BaseComponent;
+use Illuminate\Contracts\View\View;
 
-final class NavigationBuilder
+final class NavigationItem extends BaseComponent
 {
-    /**
-     * @return NavigationGroup[]
-     */
-    public function build(): array
+    public function __construct(
+        public NavigationItemData $item,
+    ) {
+    }
+
+    public function style(): NavigationItemStyle
     {
-        return [
+        return new NavigationItemStyle();
+    }
 
-            NavigationGroup::make(
-                'General',
-                [
-                    NavigationItem::make('Dashboard', 'dashboard')
-                        ->icon('heroicon-o-home'),
-                ],
-            ),
+    public function active(): bool
+    {
+        return request()->routeIs($this->item->route);
+    }
 
-            NavigationGroup::make(
-                'Data',
-                [
-                    NavigationItem::make('News', 'news.index')
-                        ->icon('heroicon-o-newspaper'),
-
-                    NavigationItem::make('Gold Prices', 'gold-prices.index')
-                        ->icon('heroicon-o-currency-dollar'),
-                ],
-            ),
-
-            NavigationGroup::make(
-                'Prediction',
-                [
-                    NavigationItem::make('Sentiment Analysis', 'sentiment.index')
-                        ->icon('heroicon-o-face-smile'),
-
-                    NavigationItem::make('Predictions', 'predictions.index')
-                        ->icon('heroicon-o-chart-bar'),
-
-                    NavigationItem::make('Model Performance', 'performance.index')
-                        ->icon('heroicon-o-chart-pie'),
-                ],
-            ),
-
-            NavigationGroup::make(
-                'System',
-                [
-                    NavigationItem::make('Settings', 'settings.index')
-                        ->icon('heroicon-o-cog-6-tooth'),
-                ],
-            ),
-
-        ];
+    public function render(): View
+    {
+        return view('components.layout.navigation-item');
     }
 }

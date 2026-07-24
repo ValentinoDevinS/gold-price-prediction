@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\Layout\Styles;
 
 use App\Support\Ui\ClassBuilder;
+use App\Support\Ui\BaseStyle;
 
-class NavigationItemStyle
+class NavigationItemStyle extends BaseStyle
 {
     public function link(bool $active = false): string
     {
-        return ClassBuilder::make()
+        return $this->builder()
             ->add('flex items-center gap-3')
             ->add('rounded-lg')
             ->add('px-3 py-2')
@@ -21,14 +24,14 @@ class NavigationItemStyle
 
     public function icon(): string
     {
-        return ClassBuilder::make()
+        return $this->builder()
             ->add('h-5 w-5')
             ->build();
     }
 
     public function label(): string
     {
-        return ClassBuilder::make()
+        return $this->builder()
             ->add('flex-1')
             ->build();
     }

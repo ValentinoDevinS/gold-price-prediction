@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Support\Ui;
 
-use Illuminate\Support\Collection;
-
 final class ClassBuilder
 {
     /**
@@ -47,7 +45,9 @@ final class ClassBuilder
     public function build(): string
     {
         return collect($this->classes)
-            ->flatMap(fn (string $class): array => preg_split('/\s+/', trim($class)) ?: [])
+            ->flatMap(
+                fn (string $class): array => preg_split('/\s+/', trim($class)) ?: []
+            )
             ->filter()
             ->unique()
             ->implode(' ');

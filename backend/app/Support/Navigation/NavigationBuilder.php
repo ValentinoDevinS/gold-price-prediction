@@ -6,6 +6,7 @@ namespace App\Support\Navigation;
 
 use App\Data\Layout\NavigationGroup;
 use App\Data\Layout\NavigationItem;
+use Illuminate\Support\Facades\Route;
 
 final class NavigationBuilder
 {
@@ -14,32 +15,54 @@ final class NavigationBuilder
      */
     public function build(): array
     {
-        return [
-
+        return array_values(array_filter([
             NavigationGroup::make(
                 'General',
-                [
-                    NavigationItem::make('Dashboard', 'dashboard'),
-                ],
+                $this->items([
+                    ['Dashboard', 'dashboard'],
+                ]),
             ),
 
             NavigationGroup::make(
                 'Data',
-                [
-                    NavigationItem::make('News', 'news.index'),
-                    NavigationItem::make('Gold Prices', 'gold-prices.index'),
-                ],
+                $this->items([
+                    ['News', 'news.index'],
+                    ['Gold Prices', 'gold-prices.index'],
+                ]),
             ),
 
             NavigationGroup::make(
                 'Prediction',
-                [
-                    NavigationItem::make('Sentiment', 'sentiment.index'),
-                    NavigationItem::make('Prediction', 'prediction.index'),
-                    NavigationItem::make('Performance', 'performance.index'),
-                ],
+                $this->items([
+                    ['Sentiment', 'sentiment.index'],
+                    ['Prediction', 'prediction.index'],
+                    ['Performance', 'performance.index'],
+                ]),
             ),
+        ], fn (NavigationGroup $group) => ! empty($group->items)));
+    }
 
-        ];
+    /**
+     * Build navigation items from route definitions.
+     *
+     * @param array<int, array{0:string,1:string}> $definitions
+     * @return NavigationItem[]
+     */
+    private function items(array $definitions): array
+    {
+        $items = [];
+
+        foreach ($definitions as [$label, $route]) {
+            if (! Route::has($route)) {
+                continue;
+            }
+
+            $items[] = NavigationItem::make(
+                label: $label,
+                route: $route,
+            );
+        }
+
+        return $items;
     }
 }

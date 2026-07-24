@@ -1,34 +1,127 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\Ui\Styles;
 
-use App\Enums\Ui\ToastVariant;
-use App\Support\Ui\ClassBuilder;
+use App\Support\Ui\BaseStyle;
 
-class ToastStyle
+final class ToastStyle extends BaseStyle
 {
-    public function container(ToastVariant $variant): string
+    public function wrapper(): string
     {
-        return ClassBuilder::make()
-            ->add('flex items-center gap-3')
-            ->add('rounded-lg')
-            ->add('shadow-lg')
-            ->add('px-4 py-3')
-            ->add('min-w-80')
-            ->add(match ($variant) {
+        return $this->builder()
+            ->addMany([
+                'pointer-events-auto',
+                'relative',
+                'flex',
+                'w-full',
+                'max-w-sm',
+                'items-start',
+                'gap-3',
+                'overflow-hidden',
+                'rounded-lg',
+                'border',
+                'bg-white',
+                'p-4',
+                'shadow-lg',
+                'dark:border-gray-700',
+                'dark:bg-gray-800',
+            ])
+            ->build();
+    }
 
-                ToastVariant::Success =>
-                    'bg-green-600 text-white',
+    public function icon(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'mt-0.5',
+                'h-5',
+                'w-5',
+                'shrink-0',
+            ])
+            ->build();
+    }
 
-                ToastVariant::Error =>
-                    'bg-red-600 text-white',
+    public function content(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'flex-1',
+                'min-w-0',
+            ])
+            ->build();
+    }
 
-                ToastVariant::Warning =>
-                    'bg-yellow-500 text-black',
+    public function title(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'text-sm',
+                'font-semibold',
+                'text-gray-900',
+                'dark:text-white',
+            ])
+            ->build();
+    }
 
-                ToastVariant::Info =>
-                    'bg-blue-600 text-white',
-            })
+    public function description(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'mt-1',
+                'text-sm',
+                'leading-5',
+                'text-gray-600',
+                'dark:text-gray-300',
+            ])
+            ->build();
+    }
+
+    public function actions(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'mt-3',
+                'flex',
+                'items-center',
+                'gap-2',
+            ])
+            ->build();
+    }
+
+    public function closeButton(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'ml-auto',
+                'inline-flex',
+                'h-8',
+                'w-8',
+                'items-center',
+                'justify-center',
+                'rounded-md',
+                'transition-colors',
+                'hover:bg-gray-100',
+                'focus:outline-none',
+                'focus:ring-2',
+                'focus:ring-indigo-500',
+                'dark:hover:bg-gray-700',
+            ])
+            ->build();
+    }
+
+    public function progress(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'absolute',
+                'bottom-0',
+                'left-0',
+                'h-1',
+                'w-full',
+                'origin-left',
+            ])
             ->build();
     }
 }

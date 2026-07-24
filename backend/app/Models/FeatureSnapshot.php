@@ -112,4 +112,11 @@ class FeatureSnapshot extends BaseModel
             SentimentAnalysis::class
         );
     }
+
+    public function predictionResults()
+    {
+        return $this->hasMany(
+            PredictionResult::class
+        );
+    }
 }

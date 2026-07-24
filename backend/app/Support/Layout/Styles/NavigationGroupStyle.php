@@ -1,33 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\Layout\Styles;
 
-use App\Support\Ui\ClassBuilder;
+use App\Support\Ui\BaseStyle;
 
-class NavigationGroupStyle
+final class NavigationGroupStyle extends BaseStyle
 {
     public function wrapper(): string
     {
-        return ClassBuilder::make()
+        return $this->builder()
             ->add('space-y-2')
             ->build();
     }
 
     public function title(): string
     {
-        return ClassBuilder::make()
-            ->add('px-3')
-            ->add('text-xs')
-            ->add('font-semibold')
-            ->add('uppercase')
-            ->add('tracking-wider')
-            ->add('text-gray-500')
+        return $this->builder()
+            ->addMany([
+                'px-3',
+                'text-xs',
+                'font-semibold',
+                'uppercase',
+                'tracking-wider',
+                'text-secondary',
+            ])
             ->build();
     }
 
     public function items(): string
     {
-        return ClassBuilder::make()
+        return $this->builder()
             ->add('space-y-1')
             ->build();
     }

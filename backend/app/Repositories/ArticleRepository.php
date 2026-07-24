@@ -46,4 +46,26 @@ class ArticleRepository extends BaseRepository
             $urlHash
         );
     }
+
+    /**
+     * Retrieve article pipeline or fail.
+     */
+    public function findPipelineOrFailByUuid(
+        string $uuid
+    ): Article {
+
+        return $this->query()
+
+            ->with([
+                'fullArticle.cleanArticle.sentimentAnalysis.featureSnapshot.predictionResults.evaluation',
+            ])
+
+            ->where(
+                'uuid',
+                $uuid
+            )
+
+            ->firstOrFail();
+
+    }
 }

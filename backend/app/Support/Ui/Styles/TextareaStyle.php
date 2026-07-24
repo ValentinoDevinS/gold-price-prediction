@@ -1,114 +1,89 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\Ui\Styles;
 
-use App\Enums\Ui\InputSize;
-use App\Enums\Ui\TextareaResize;
-use App\Support\Ui\ClassBuilder;
+use App\Support\Ui\BaseStyle;
 
-class TextareaStyle
+final class TextareaStyle extends BaseStyle
 {
-    public static function make(
-        InputSize $size,
-        TextareaResize $resize,
-        bool $hasError = false,
-        bool $disabled = false,
-    ): string {
-        return (new ClassBuilder())
-            ->add(self::base())
-            ->add(self::size($size))
-            ->add(self::resize($resize))
-            ->add(self::state($hasError, $disabled))
+    public function wrapper(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'space-y-2',
+            ])
             ->build();
     }
 
-    protected static function base(): string
+    public function label(): string
     {
-        return implode(' ', [
-            'w-full',
-
-            'rounded-button',
-
-            'border',
-            'border-border',
-
-            'bg-card',
-            'text-text',
-
-            'placeholder:text-text-secondary',
-
-            'transition-all',
-            'duration-normal',
-
-            'focus:outline-none',
-            'focus:ring-2',
-            'focus:ring-primary',
-            'focus:border-primary',
-        ]);
+        return $this->builder()
+            ->addMany([
+                'block',
+                'text-sm',
+                'font-medium',
+                'text-gray-700',
+                'dark:text-gray-300',
+            ])
+            ->build();
     }
 
-    protected static function size(InputSize $size): string
+    public function textarea(): string
     {
-        return match ($size) {
-
-            InputSize::Small => implode(' ', [
-                'min-h-24',
+        return $this->builder()
+            ->addMany([
+                'block',
+                'w-full',
+                'min-h-32',
+                'rounded-lg',
+                'border',
+                'border-gray-300',
+                'bg-white',
                 'px-3',
                 'py-2',
                 'text-sm',
-            ]),
-
-            InputSize::Medium => implode(' ', [
-                'min-h-32',
-                'px-4',
-                'py-3',
-                'text-sm',
-            ]),
-
-            InputSize::Large => implode(' ', [
-                'min-h-40',
-                'px-4',
-                'py-4',
-                'text-base',
-            ]),
-        };
+                'text-gray-900',
+                'placeholder:text-gray-400',
+                'shadow-sm',
+                'resize-y',
+                'transition-colors',
+                'focus:border-indigo-500',
+                'focus:outline-none',
+                'focus:ring-2',
+                'focus:ring-indigo-500',
+                'disabled:cursor-not-allowed',
+                'disabled:bg-gray-100',
+                'disabled:opacity-60',
+                'dark:border-gray-600',
+                'dark:bg-gray-800',
+                'dark:text-white',
+                'dark:placeholder:text-gray-500',
+            ])
+            ->build();
     }
 
-    protected static function resize(TextareaResize $resize): string
+    public function helper(): string
     {
-        return match ($resize) {
-
-            TextareaResize::None => 'resize-none',
-
-            TextareaResize::Vertical => 'resize-y',
-
-            TextareaResize::Horizontal => 'resize-x',
-
-            TextareaResize::Both => 'resize',
-        };
+        return $this->builder()
+            ->addMany([
+                'text-sm',
+                'text-gray-500',
+                'dark:text-gray-400',
+            ])
+            ->build();
     }
 
-    protected static function state(
-        bool $hasError,
-        bool $disabled,
-    ): string {
-
-        if ($disabled) {
-            return implode(' ', [
-                'opacity-60',
-                'cursor-not-allowed',
-                'bg-background',
-            ]);
-        }
-
-        if ($hasError) {
-            return implode(' ', [
-                'border-danger',
-                'focus:border-danger',
-                'focus:ring-danger',
-            ]);
-        }
-
-        return '';
+    public function error(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'text-sm',
+                'font-medium',
+                'text-red-600',
+                'dark:text-red-400',
+            ])
+            ->build();
     }
 }

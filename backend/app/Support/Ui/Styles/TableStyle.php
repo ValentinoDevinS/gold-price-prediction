@@ -1,154 +1,187 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\Ui\Styles;
 
-use App\Enums\Ui\TableAlignment;
-use App\Enums\Ui\TableDensity;
-use App\Support\Ui\ClassBuilder;
+use App\Support\Ui\BaseStyle;
 
-class TableStyle
+final class TableStyle extends BaseStyle
 {
-    public function __construct(
-        protected TableDensity $density = TableDensity::Comfortable,
-    ) {
-    }
-
     public function wrapper(): string
     {
-        return ClassBuilder::make()
-            ->add(
-                'relative',
-                'overflow-x-auto',
-                'rounded-button',
+        return $this->builder()
+            ->addMany([
+                'overflow-hidden',
+                'rounded-xl',
                 'border',
-                'border-border',
-                'bg-surface',
-            )
-            ->toString();
+                'border-gray-200',
+                'bg-white',
+                'shadow-sm',
+                'dark:border-gray-700',
+                'dark:bg-gray-800',
+            ])
+            ->build();
+    }
+
+    public function responsive(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'overflow-x-auto',
+            ])
+            ->build();
     }
 
     public function table(): string
     {
-        return ClassBuilder::make()
-            ->add(
+        return $this->builder()
+            ->addMany([
                 'min-w-full',
-                'border-collapse',
+                'divide-y',
+                'divide-gray-200',
+                'dark:divide-gray-700',
+            ])
+            ->build();
+    }
+
+    public function head(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'bg-gray-50',
+                'dark:bg-gray-900',
+            ])
+            ->build();
+    }
+
+    public function headRow(): string
+    {
+        return '';
+    }
+
+    public function headCell(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'px-6',
+                'py-3',
                 'text-left',
-            )
-            ->toString();
-    }
-
-    public function toolbar(): string
-    {
-        return ClassBuilder::make()
-            ->add(
-                'flex',
-                'items-center',
-                'justify-between',
-                'gap-4',
-                'p-4',
-                'border-b',
-                'border-border',
-                'bg-surface',
-                'flex-wrap',
-            )
-            ->toString();
-    }
-
-    public function header(): string
-    {
-        return ClassBuilder::make()
-            ->add(
-                'sticky',
-                'top-0',
-                'z-10',
-                'bg-surface-secondary',
-                'border-b',
-                'border-border',
-            )
-            ->toString();
-    }
-
-    public function headerCell(
-        TableAlignment $alignment = TableAlignment::Left,
-    ): string {
-        return ClassBuilder::make()
-            ->add(
+                'text-xs',
                 'font-semibold',
-                'text-secondary',
-                'whitespace-nowrap',
-                $this->padding(),
-                $this->alignment($alignment),
-            )
-            ->toString();
+                'uppercase',
+                'tracking-wider',
+                'text-gray-500',
+                'dark:text-gray-400',
+            ])
+            ->build();
+    }
+
+    public function body(): string
+    {
+        return $this->builder()
+            ->build();
     }
 
     public function row(): string
     {
-        return ClassBuilder::make()
-            ->add(
+        return $this->builder()
+            ->addMany([
                 'border-b',
-                'border-border',
-                'hover:bg-surface-secondary',
+                'border-gray-200',
                 'transition-colors',
-            )
-            ->toString();
+                'hover:bg-gray-50',
+                'dark:border-gray-700',
+                'dark:hover:bg-gray-700/50',
+            ])
+            ->build();
     }
 
-    public function cell(
-        TableAlignment $alignment = TableAlignment::Left,
-    ): string {
-        return ClassBuilder::make()
-            ->add(
-                $this->padding(),
-                $this->alignment($alignment),
-                'align-middle',
+    public function cell(): string
+    {
+        return $this->builder()
+            ->addMany([
                 'whitespace-nowrap',
-            )
-            ->toString();
+                'px-6',
+                'py-4',
+                'text-sm',
+                'text-gray-700',
+                'dark:text-gray-300',
+            ])
+            ->build();
+    }
+
+    public function checkbox(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'h-4',
+                'w-4',
+                'rounded',
+                'border-gray-300',
+                'text-indigo-600',
+                'focus:ring-indigo-500',
+            ])
+            ->build();
+    }
+
+    public function actions(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'flex',
+                'justify-end',
+                'gap-2',
+            ])
+            ->build();
     }
 
     public function emptyState(): string
     {
-        return ClassBuilder::make()
-            ->add(
+        return $this->builder()
+            ->addMany([
+                'px-6',
                 'py-16',
                 'text-center',
-                'text-secondary',
-            )
-            ->toString();
+                'text-gray-500',
+                'dark:text-gray-400',
+            ])
+            ->build();
     }
 
-    protected function padding(): string
+    public function loadingState(): string
     {
-        return match ($this->density) {
-
-            TableDensity::Compact =>
-                'px-3 py-2 text-sm',
-
-            TableDensity::Comfortable =>
-                'px-4 py-3',
-
-            TableDensity::Spacious =>
-                'px-6 py-4 text-lg',
-
-        };
+        return $this->builder()
+            ->addMany([
+                'px-6',
+                'py-8',
+            ])
+            ->build();
     }
 
-    protected function alignment(
-        TableAlignment $alignment,
-    ): string {
-        return match ($alignment) {
+    public function footer(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'border-t',
+                'border-gray-200',
+                'bg-gray-50',
+                'px-6',
+                'py-4',
+                'dark:border-gray-700',
+                'dark:bg-gray-900',
+            ])
+            ->build();
+    }
 
-            TableAlignment::Left =>
-                'text-left',
-
-            TableAlignment::Center =>
-                'text-center',
-
-            TableAlignment::Right =>
-                'text-right',
-
-        };
+    public function pagination(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'flex',
+                'items-center',
+                'justify-between',
+            ])
+            ->build();
     }
 }

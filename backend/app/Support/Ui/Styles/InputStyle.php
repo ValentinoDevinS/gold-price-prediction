@@ -1,94 +1,98 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\Ui\Styles;
 
-use App\Enums\Ui\InputSize;
-use App\Support\Ui\ClassBuilder;
+use App\Support\Ui\BaseStyle;
 
-class InputStyle
+final class InputStyle extends BaseStyle
 {
-    public static function make(
-        InputSize $size,
-        bool $hasError = false,
-        bool $disabled = false,
-    ): string {
-        return (new ClassBuilder())
-            ->add(self::base())
-            ->add(self::size($size))
-            ->add(self::state($hasError, $disabled))
+    public function wrapper(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'space-y-2',
+            ])
             ->build();
     }
 
-    protected static function base(): string
+    public function label(): string
     {
-        return implode(' ', [
-            'w-full',
-
-            'rounded-button',
-
-            'border',
-            'border-border',
-
-            'bg-card',
-            'text-text',
-
-            'placeholder:text-text-secondary',
-
-            'transition-all',
-            'duration-normal',
-
-            'focus:outline-none',
-            'focus:ring-2',
-            'focus:ring-primary',
-            'focus:border-primary',
-        ]);
+        return $this->builder()
+            ->addMany([
+                'block',
+                'text-sm',
+                'font-medium',
+                'text-gray-700',
+                'dark:text-gray-300',
+            ])
+            ->build();
     }
 
-    protected static function size(InputSize $size): string
+    public function input(): string
     {
-        return match ($size) {
-
-            InputSize::Small => implode(' ', [
-                'h-9',
+        return $this->builder()
+            ->addMany([
+                'block',
+                'w-full',
+                'rounded-lg',
+                'border',
+                'border-gray-300',
+                'bg-white',
                 'px-3',
+                'py-2',
                 'text-sm',
-            ]),
-
-            InputSize::Medium => implode(' ', [
-                'h-10',
-                'px-4',
-                'text-sm',
-            ]),
-
-            InputSize::Large => implode(' ', [
-                'h-12',
-                'px-4',
-                'text-base',
-            ]),
-        };
+                'text-gray-900',
+                'placeholder:text-gray-400',
+                'shadow-sm',
+                'transition-colors',
+                'focus:border-indigo-500',
+                'focus:outline-none',
+                'focus:ring-2',
+                'focus:ring-indigo-500',
+                'disabled:cursor-not-allowed',
+                'disabled:bg-gray-100',
+                'disabled:opacity-60',
+                'dark:border-gray-600',
+                'dark:bg-gray-800',
+                'dark:text-white',
+                'dark:placeholder:text-gray-500',
+            ])
+            ->build();
     }
 
-    protected static function state(
-        bool $hasError,
-        bool $disabled,
-    ): string {
+    public function icon(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'h-5',
+                'w-5',
+                'text-gray-400',
+            ])
+            ->build();
+    }
 
-        if ($disabled) {
-            return implode(' ', [
-                'opacity-60',
-                'cursor-not-allowed',
-                'bg-background',
-            ]);
-        }
+    public function helper(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'text-sm',
+                'text-gray-500',
+                'dark:text-gray-400',
+            ])
+            ->build();
+    }
 
-        if ($hasError) {
-            return implode(' ', [
-                'border-danger',
-                'focus:border-danger',
-                'focus:ring-danger',
-            ]);
-        }
-
-        return '';
+    public function error(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'text-sm',
+                'font-medium',
+                'text-red-600',
+                'dark:text-red-400',
+            ])
+            ->build();
     }
 }

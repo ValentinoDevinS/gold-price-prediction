@@ -1,33 +1,61 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\Layout\Styles;
 
-use App\Support\Ui\ClassBuilder;
+use App\Support\Ui\BaseStyle;
 
-class TopbarStyle
+final class TopbarStyle extends BaseStyle
 {
     public function wrapper(): string
     {
-        return ClassBuilder::make()
-            ->add('flex')
-            ->add('h-16')
-            ->add('items-center')
-            ->add('justify-between')
-            ->add('border-b')
-            ->add('border-gray-200')
-            ->add('bg-white')
-            ->add('px-6')
-            ->add('dark:border-gray-800')
-            ->add('dark:bg-gray-900')
+        return $this->builder()
+            ->addMany([
+                'flex',
+                'h-16',
+                'items-center',
+                'justify-between',
+                'border-b',
+                'border-border',
+                'bg-surface',
+                'px-6',
+                'gap-4',
+            ])
             ->build();
     }
 
     public function section(): string
     {
-        return ClassBuilder::make()
-            ->add('flex')
-            ->add('items-center')
-            ->add('gap-3')
+        return $this->builder()
+            ->addMany([
+                'flex',
+                'flex-1',
+                'items-center',
+                'gap-4',
+            ])
+            ->build();
+    }
+
+    public function title(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'text-lg',
+                'font-semibold',
+                'text-primary',
+            ])
+            ->build();
+    }
+
+    public function actions(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'flex',
+                'items-center',
+                'gap-2',
+            ])
             ->build();
     }
 }

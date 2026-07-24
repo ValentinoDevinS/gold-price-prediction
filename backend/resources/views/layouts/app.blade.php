@@ -1,76 +1,36 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<head>
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <meta charset="utf-8">
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1"
-    >
+        <!-- Scripts -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100">
+            @include('layouts.navigation')
 
-    <title>
+            <!-- Page Heading -->
+            @isset($header)
+                <header class="bg-white shadow">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
+                    </div>
+                </header>
+            @endisset
 
-        {{ config('app.name') }}
-
-    </title>
-
-    @vite([
-        'resources/css/app.css',
-        'resources/js/app.js',
-    ])
-
-</head>
-
-<body class="bg-gray-100 dark:bg-gray-950">
-
-<div class="flex h-screen">
-
-    <x-layout.sidebar>
-
-        <x-slot:header>
-
-            <x-layout.application-logo/>
-
-        </x-slot:header>
-
-        <x-slot:footer>
-
-            {{ auth()->user()->name }}
-
-        </x-slot:footer>
-
-    </x-layout.sidebar>
-
-    <div class="flex flex-1 flex-col overflow-hidden">
-
-        <x-layout.topbar>
-
-            <x-slot:start>
-
-                {{ $breadcrumb ?? '' }}
-
-            </x-slot:start>
-
-            <x-slot:end>
-
-                {{ auth()->user()->name }}
-
-            </x-slot:end>
-
-        </x-layout.topbar>
-
-        <x-layout.page-content>
-
-            {{ $slot }}
-
-        </x-layout.page-content>
-
-    </div>
-
-</div>
-
-</body>
-
+            <!-- Page Content -->
+            <main>
+                {{ $slot }}
+            </main>
+        </div>
+    </body>
 </html>

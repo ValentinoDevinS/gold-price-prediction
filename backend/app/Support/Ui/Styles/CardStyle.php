@@ -1,53 +1,111 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\Ui\Styles;
 
-use App\Enums\Ui\CardVariant;
-use App\Support\Ui\ClassBuilder;
+use App\Support\Ui\BaseStyle;
 
-class CardStyle
+final class CardStyle extends BaseStyle
 {
-    public static function make(
-        CardVariant $variant,
-    ): string {
-        return (new ClassBuilder())
-            ->add(self::base())
-            ->add(self::variant($variant))
+    public function wrapper(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'rounded-xl',
+                'border',
+                'border-gray-200',
+                'bg-white',
+                'shadow-sm',
+                'overflow-hidden',
+                'dark:border-gray-700',
+                'dark:bg-gray-800',
+            ])
             ->build();
     }
 
-    protected static function base(): string
+    public function header(): string
     {
-        return implode(' ', [
-            'rounded-card',
-            'overflow-hidden',
-            'transition-all',
-            'duration-normal',
-        ]);
+        return $this->builder()
+            ->addMany([
+                'flex',
+                'items-center',
+                'justify-between',
+                'gap-4',
+                'border-b',
+                'border-gray-200',
+                'px-6',
+                'py-4',
+                'dark:border-gray-700',
+            ])
+            ->build();
     }
-    
-    protected static function variant(CardVariant $variant): string
+
+    public function title(): string
     {
-        return match ($variant) {
+        return $this->builder()
+            ->addMany([
+                'text-lg',
+                'font-semibold',
+                'text-gray-900',
+                'dark:text-white',
+            ])
+            ->build();
+    }
 
-            CardVariant::Default => implode(' ', [
-                'bg-card',
-                'border',
-                'border-border',
-            ]),
+    public function subtitle(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'mt-1',
+                'text-sm',
+                'text-gray-500',
+                'dark:text-gray-400',
+            ])
+            ->build();
+    }
 
-            CardVariant::Outlined => implode(' ', [
-                'bg-transparent',
-                'border',
-                'border-border',
-            ]),
+    public function body(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'p-6',
+            ])
+            ->build();
+    }
 
-            CardVariant::Elevated => implode(' ', [
-                'bg-card',
-                'shadow-card',
-            ]),
+    public function footer(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'border-t',
+                'border-gray-200',
+                'px-6',
+                'py-4',
+                'dark:border-gray-700',
+            ])
+            ->build();
+    }
 
-            CardVariant::Flat => 'bg-card',
-        };
+    public function actions(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'flex',
+                'items-center',
+                'gap-2',
+            ])
+            ->build();
+    }
+
+    public function divider(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'border-t',
+                'border-gray-200',
+                'dark:border-gray-700',
+            ])
+            ->build();
     }
 }

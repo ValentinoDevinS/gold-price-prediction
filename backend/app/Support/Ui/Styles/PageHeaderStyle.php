@@ -1,54 +1,85 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\Ui\Styles;
 
-use App\Support\Ui\ClassBuilder;
+use App\Support\Ui\BaseStyle;
 
-class PageHeaderStyle
+final class PageHeaderStyle extends BaseStyle
 {
     public function wrapper(): string
     {
-        return ClassBuilder::make()
-            ->add('flex')
-            ->add('items-start')
-            ->add('justify-between')
-            ->add('gap-6')
-            ->add('mb-6')
+        return $this->builder()
+            ->addMany([
+                'mb-8',
+                'flex',
+                'flex-col',
+                'gap-4',
+                'md:flex-row',
+                'md:items-start',
+                'md:justify-between',
+            ])
             ->build();
     }
 
     public function content(): string
     {
-        return ClassBuilder::make()
-            ->add('flex-1')
+        return $this->builder()
+            ->addMany([
+                'min-w-0',
+                'flex-1',
+            ])
+            ->build();
+    }
+
+    public function breadcrumb(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'mb-2',
+            ])
             ->build();
     }
 
     public function title(): string
     {
-        return ClassBuilder::make()
-            ->add('text-3xl')
-            ->add('font-bold')
-            ->add('text-gray-900')
-            ->add('dark:text-gray-100')
+        return $this->builder()
+            ->addMany([
+                'text-3xl',
+                'font-bold',
+                'tracking-tight',
+                'text-gray-900',
+                'dark:text-white',
+            ])
             ->build();
     }
 
     public function description(): string
     {
-        return ClassBuilder::make()
-            ->add('mt-2')
-            ->add('text-gray-600')
-            ->add('dark:text-gray-400')
+        return $this->builder()
+            ->addMany([
+                'mt-2',
+                'max-w-3xl',
+                'text-sm',
+                'leading-6',
+                'text-gray-500',
+                'dark:text-gray-400',
+            ])
             ->build();
     }
 
     public function actions(): string
     {
-        return ClassBuilder::make()
-            ->add('flex')
-            ->add('items-center')
-            ->add('gap-3')
+        return $this->builder()
+            ->addMany([
+                'flex',
+                'flex-wrap',
+                'items-center',
+                'justify-end',
+                'gap-3',
+                'shrink-0',
+            ])
             ->build();
     }
 }

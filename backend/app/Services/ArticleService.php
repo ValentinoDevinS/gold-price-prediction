@@ -163,4 +163,81 @@ class ArticleService extends BaseService
     | Business
     |--------------------------------------------------------------------------
     */
+
+    /**
+     * Article statistics.
+     *
+     * @return array<string, array<string, string|int>>
+     */
+    public function statistics(): array
+    {
+        return [
+
+            'total' => [
+
+                'title' => 'Total Articles',
+
+                'value' => $this->repository->count(),
+
+                'description' => 'Collected articles',
+
+            ],
+
+            'new' => [
+
+                'title' => 'New',
+
+                'value' => $this->repository
+                    ->countBy(
+                        'status',
+                        'NEW'
+                    ),
+
+                'description' => 'Waiting for download',
+
+            ],
+
+            'downloaded' => [
+
+                'title' => 'Downloaded',
+
+                'value' => $this->repository
+                    ->countBy(
+                        'status',
+                        'DOWNLOADED'
+                    ),
+
+                'description' => 'Downloaded successfully',
+
+            ],
+
+            'failed' => [
+
+                'title' => 'Failed',
+
+                'value' => $this->repository
+                    ->countBy(
+                        'status',
+                        'FAILED'
+                    ),
+
+                'description' => 'Download failed',
+
+            ],
+
+        ];
+    }
+
+    /**
+     * Retrieve article pipeline.
+     */
+    public function findPipelineOrFailByUuid(
+        string $uuid
+    ): Article
+    {
+        return $this->repository
+            ->findPipelineOrFailByUuid(
+                $uuid
+            );
+    }
 }

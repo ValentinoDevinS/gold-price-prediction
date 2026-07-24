@@ -1,59 +1,79 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\Ui\Styles;
 
-use App\Support\Ui\ClassBuilder;
+use App\Support\Ui\BaseStyle;
 
-class CheckboxStyle
+final class CheckboxStyle extends BaseStyle
 {
-    public static function make(
-        bool $hasError = false,
-        bool $disabled = false,
-    ): string {
-        return (new ClassBuilder())
-            ->add(self::base())
-            ->add(self::state($hasError, $disabled))
+    public function wrapper(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'flex',
+                'items-start',
+                'gap-3',
+            ])
             ->build();
     }
 
-    protected static function base(): string
+    public function checkbox(): string
     {
-        return implode(' ', [
-            'h-4',
-            'w-4',
-
-            'rounded',
-
-            'border',
-            'border-border',
-
-            'text-primary',
-
-            'focus:ring-2',
-            'focus:ring-primary',
-            'focus:ring-offset-0',
-        ]);
+        return $this->builder()
+            ->addMany([
+                'mt-0.5',
+                'h-4',
+                'w-4',
+                'rounded',
+                'border-gray-300',
+                'text-indigo-600',
+                'shadow-sm',
+                'focus:ring-2',
+                'focus:ring-indigo-500',
+                'disabled:cursor-not-allowed',
+                'disabled:opacity-60',
+                'dark:border-gray-600',
+                'dark:bg-gray-800',
+            ])
+            ->build();
     }
 
-    protected static function state(
-        bool $hasError,
-        bool $disabled,
-    ): string {
+    public function label(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'text-sm',
+                'font-medium',
+                'text-gray-700',
+                'dark:text-gray-300',
+            ])
+            ->build();
+    }
 
-        if ($disabled) {
-            return implode(' ', [
-                'opacity-60',
-                'cursor-not-allowed',
-            ]);
-        }
+    public function helper(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'mt-1',
+                'text-sm',
+                'text-gray-500',
+                'dark:text-gray-400',
+            ])
+            ->build();
+    }
 
-        if ($hasError) {
-            return implode(' ', [
-                'border-danger',
-                'focus:ring-danger',
-            ]);
-        }
-
-        return '';
+    public function error(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'mt-1',
+                'text-sm',
+                'font-medium',
+                'text-red-600',
+                'dark:text-red-400',
+            ])
+            ->build();
     }
 }

@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\Layout\Styles;
 
-use App\Support\Ui\ClassBuilder;
+use App\Support\Ui\BaseStyle;
 
-class SidebarStyle
+final class SidebarStyle extends BaseStyle
 {
     public function wrapper(): string
     {
-        return ClassBuilder::make()
+        return $this->builder()
             ->add('flex')
             ->add('h-screen')
             ->add('w-72')
@@ -23,7 +25,7 @@ class SidebarStyle
 
     public function header(): string
     {
-        return ClassBuilder::make()
+        return $this->builder()
             ->add('border-b')
             ->add('border-gray-200')
             ->add('px-6')
@@ -33,7 +35,7 @@ class SidebarStyle
 
     public function content(): string
     {
-        return ClassBuilder::make()
+        return $this->builder()
             ->add('flex-1')
             ->add('space-y-6')
             ->add('overflow-y-auto')
@@ -43,7 +45,7 @@ class SidebarStyle
 
     public function footer(): string
     {
-        return ClassBuilder::make()
+        return $this->builder()
             ->add('border-t')
             ->add('border-gray-200')
             ->add('p-4')

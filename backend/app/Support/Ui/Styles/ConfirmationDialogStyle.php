@@ -1,35 +1,118 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\Ui\Styles;
 
-use App\Enums\Ui\ConfirmationVariant;
-use App\Support\Ui\ClassBuilder;
+use App\Support\Ui\BaseStyle;
 
-class ConfirmationDialogStyle
+final class ConfirmationDialogStyle extends BaseStyle
 {
-    public function icon(ConfirmationVariant $variant): string
+    public function overlay(): string
     {
-        return ClassBuilder::make()
-            ->add('mx-auto mb-4')
-            ->add('flex h-12 w-12 items-center justify-center')
-            ->add('rounded-full')
-            ->add(match ($variant) {
-
-                ConfirmationVariant::Default =>
-                    'bg-blue-100 text-blue-600',
-
-                ConfirmationVariant::Danger =>
-                    'bg-red-100 text-red-600',
-
-            })
+        return $this->builder()
+            ->addMany([
+                'fixed',
+                'inset-0',
+                'z-50',
+                'flex',
+                'items-center',
+                'justify-center',
+                'bg-black/50',
+                'backdrop-blur-sm',
+                'p-4',
+            ])
             ->build();
     }
 
-    public function message(): string
+    public function container(): string
     {
-        return ClassBuilder::make()
-            ->add('text-center')
-            ->add('text-gray-600')
+        return $this->builder()
+            ->addMany([
+                'w-full',
+                'max-w-md',
+                'rounded-xl',
+                'bg-white',
+                'shadow-2xl',
+                'dark:bg-gray-800',
+            ])
+            ->build();
+    }
+
+    public function icon(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'mx-auto',
+                'flex',
+                'h-12',
+                'w-12',
+                'items-center',
+                'justify-center',
+                'rounded-full',
+            ])
+            ->build();
+    }
+
+    public function content(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'px-6',
+                'pt-6',
+                'text-center',
+            ])
+            ->build();
+    }
+
+    public function title(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'mt-4',
+                'text-lg',
+                'font-semibold',
+                'text-gray-900',
+                'dark:text-white',
+            ])
+            ->build();
+    }
+
+    public function description(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'mt-2',
+                'text-sm',
+                'leading-6',
+                'text-gray-500',
+                'dark:text-gray-400',
+            ])
+            ->build();
+    }
+
+    public function footer(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'mt-6',
+                'border-t',
+                'border-gray-200',
+                'px-6',
+                'py-4',
+                'dark:border-gray-700',
+            ])
+            ->build();
+    }
+
+    public function actions(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'flex',
+                'justify-end',
+                'gap-3',
+            ])
             ->build();
     }
 }

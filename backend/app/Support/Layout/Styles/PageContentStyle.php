@@ -1,28 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\Layout\Styles;
 
-use App\Support\Ui\ClassBuilder;
+use App\Support\Ui\BaseStyle;
 
-class PageContentStyle
+final class PageContentStyle extends BaseStyle
 {
     public function wrapper(): string
     {
-        return ClassBuilder::make()
-            ->add('flex-1')
-            ->add('overflow-y-auto')
-            ->add('bg-gray-50')
-            ->add('dark:bg-gray-950')
+        return $this->builder()
+            ->addMany([
+                'flex-1',
+                'overflow-y-auto',
+                'bg-surface-secondary',
+            ])
             ->build();
     }
 
     public function content(): string
     {
-        return ClassBuilder::make()
-            ->add('mx-auto')
-            ->add('w-full')
-            ->add('max-w-7xl')
-            ->add('p-6')
+        return $this->builder()
+            ->addMany([
+                'mx-auto',
+                'w-full',
+                'max-w-7xl',
+                'p-6',
+            ])
             ->build();
     }
 }

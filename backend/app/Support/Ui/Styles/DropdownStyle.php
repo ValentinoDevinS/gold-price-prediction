@@ -1,56 +1,126 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Support\Ui\Styles;
 
-use App\Support\Ui\ClassBuilder;
+use App\Support\Ui\BaseStyle;
 
-class DropdownStyle
+final class DropdownStyle extends BaseStyle
 {
-    public function wrapper(): string
+    public function trigger(): string
     {
-        return ClassBuilder::make()
-            ->add('relative')
-            ->add('inline-block')
+        return $this->builder()
+            ->addMany([
+                'inline-flex',
+                'items-center',
+                'justify-center',
+                'gap-2',
+                'rounded-lg',
+                'transition-colors',
+                'focus:outline-none',
+                'focus:ring-2',
+                'focus:ring-indigo-500',
+            ])
             ->build();
     }
 
     public function menu(): string
     {
-        return ClassBuilder::make()
-            ->add('absolute')
-            ->add('right-0')
-            ->add('mt-2')
-            ->add('min-w-48')
-            ->add('overflow-hidden')
-            ->add('rounded-lg')
-            ->add('border')
-            ->add('border-border')
-            ->add('bg-background')
-            ->add('shadow-lg')
-            ->add('z-50')
+        return $this->builder()
+            ->addMany([
+                'absolute',
+                'right-0',
+                'z-50',
+                'mt-2',
+                'min-w-56',
+                'overflow-hidden',
+                'rounded-lg',
+                'border',
+                'border-gray-200',
+                'bg-white',
+                'shadow-lg',
+                'dark:border-gray-700',
+                'dark:bg-gray-800',
+            ])
+            ->build();
+    }
+
+    public function header(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'border-b',
+                'border-gray-200',
+                'px-4',
+                'py-3',
+                'dark:border-gray-700',
+            ])
+            ->build();
+    }
+
+    public function content(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'py-2',
+            ])
             ->build();
     }
 
     public function item(): string
     {
-        return ClassBuilder::make()
-            ->add('flex')
-            ->add('items-center')
-            ->add('gap-2')
-            ->add('px-4')
-            ->add('py-2')
-            ->add('cursor-pointer')
-            ->add('transition-colors')
-            ->add('hover:bg-muted')
+        return $this->builder()
+            ->addMany([
+                'flex',
+                'w-full',
+                'items-center',
+                'gap-3',
+                'px-4',
+                'py-2',
+                'text-sm',
+                'text-gray-700',
+                'transition-colors',
+                'hover:bg-gray-100',
+                'dark:text-gray-200',
+                'dark:hover:bg-gray-700',
+            ])
             ->build();
     }
 
-    public function checkmark(): string
+    public function icon(): string
     {
-        return ClassBuilder::make()
-            ->add('w-5')
-            ->add('text-center')
-            ->add('text-primary')
+        return $this->builder()
+            ->addMany([
+                'h-4',
+                'w-4',
+                'shrink-0',
+            ])
+            ->build();
+    }
+
+    public function divider(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'my-2',
+                'border-t',
+                'border-gray-200',
+                'dark:border-gray-700',
+            ])
+            ->build();
+    }
+
+    public function footer(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'border-t',
+                'border-gray-200',
+                'px-4',
+                'py-3',
+                'dark:border-gray-700',
+            ])
             ->build();
     }
 }
