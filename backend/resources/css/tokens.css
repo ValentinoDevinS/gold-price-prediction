@@ -1,0 +1,112 @@
+/* ======================================
+   TAILWIND 4 THEME
+   These variables generate Tailwind utilities.
+   ====================================== */
+
+@theme {
+
+    /* ========= COLORS ========= */
+
+    --color-primary: #2563EB;
+    --color-primary-hover: #1D4ED8;
+    --color-primary-light: #DBEAFE;
+
+    --color-success: #16A34A;
+    --color-success-light: #DCFCE7;
+
+    --color-warning: #F59E0B;
+    --color-warning-light: #FEF3C7;
+
+    --color-danger: #DC2626;
+    --color-danger-light: #FEE2E2;
+
+    --color-info: #0EA5E9;
+    --color-info-light: #E0F2FE;
+
+    --color-background: #F5F7FA;
+    --color-sidebar: #ECEFF3;
+    --color-card: #FFFFFF;
+
+    --color-border: #E5E7EB;
+    --color-divider: #F3F4F6;
+
+    --color-text: #374151;
+    --color-text-secondary: #6B7280;
+    --color-text-muted: #9CA3AF;
+
+    /* ========= TYPOGRAPHY ========= */
+
+    --font-sans: "Inter", sans-serif;
+
+    --text-display: 2rem;       /* 32px */
+    --text-h1: 1.75rem;         /* 28px */
+    --text-h2: 1.5rem;          /* 24px */
+    --text-h3: 1.25rem;         /* 20px */
+
+    --text-card-title: 1.125rem; /* 18px */
+
+    --text-body: .875rem;       /* 14px */
+    --text-caption: .8125rem;   /* 13px */
+    --text-small: .75rem;       /* 12px */
+
+    /* ========= FONT WEIGHT ========= */
+
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* ========= SPACING ========= */
+
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+
+    /* ========= BORDER RADIUS ========= */
+
+    --radius-button: 8px;
+    --radius-card: 12px;
+    --radius-modal: 16px;
+    --radius-pill: 9999px;
+
+    /* ========= SHADOW ========= */
+
+    --shadow-card: 0 1px 3px rgb(0 0 0 / 0.08);
+    --shadow-hover: 0 8px 20px rgb(0 0 0 / 0.08);
+
+    /* ========= TRANSITIONS ========= */
+
+    --ease-default: ease-in-out;
+
+    --duration-fast: 150ms;
+    --duration-normal: 200ms;
+    --duration-slow: 300ms;
+}
+
+/* ======================================
+   APPLICATION VARIABLES
+   Not intended to generate Tailwind utilities.
+   ====================================== */
+
+:root {
+
+    /* Component Sizes */
+
+    --input-height: 40px;
+    --button-height: 40px;
+
+    /* Z Index */
+
+    --z-page: 0;
+    --z-dropdown: 10;
+    --z-sticky: 20;
+    --z-topbar: 30;
+    --z-sidebar: 35;
+    --z-overlay: 40;
+    --z-modal: 50;
+    --z-alert: 60;
+    --z-toast: 70;
+}

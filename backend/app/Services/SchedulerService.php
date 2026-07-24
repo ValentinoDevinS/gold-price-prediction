@@ -15,6 +15,8 @@ class SchedulerService
 
         private readonly SystemActivityService $activity,
 
+        private readonly JobExecutionService $executions,
+
     ) {
     }
 
@@ -129,7 +131,7 @@ class SchedulerService
 
     }
 
-        /*
+         /*
     |--------------------------------------------------------------------------
     | Jobs
     |--------------------------------------------------------------------------
@@ -155,7 +157,7 @@ class SchedulerService
     */
 
     /**
-     * Execute immediately.
+     * Execute one job manually.
      */
     public function runNow(
         string $jobKey
@@ -166,13 +168,17 @@ class SchedulerService
             $this->repository
 
                 ->findByJobKey(
+
                     $jobKey
+
                 );
 
         if (! $job) {
 
             throw new \RuntimeException(
+
                 'Job not found.'
+
             );
 
         }
@@ -180,7 +186,11 @@ class SchedulerService
         return
 
             $this->execute(
-                $job
+
+                $job,
+
+                true
+
             );
 
     }
@@ -192,7 +202,7 @@ class SchedulerService
     */
 
     /**
-     * Execute from scheduler.
+     * Execute one scheduled job.
      */
     public function runScheduled(
         ScheduledJob $job
@@ -201,12 +211,16 @@ class SchedulerService
         return
 
             $this->execute(
-                $job
+
+                $job,
+
+                false
+
             );
 
     }
 
-        /*
+    /*
     |--------------------------------------------------------------------------
     | Execute Job
     |--------------------------------------------------------------------------
@@ -216,112 +230,137 @@ class SchedulerService
      * Execute one scheduled job.
      */
     private function execute(
-        ScheduledJob $job
+        ScheduledJob $job,
+        bool $manual = false
     ): array
     {
         /*
         |--------------------------------------------------------------------------
-        | Prevent duplicate execution
+        | Prevent Duplicate Execution
         |--------------------------------------------------------------------------
         */
 
-        if (
-
-            $job->isRunning()
-
-        ) {
+        if ($job->isRunning()) {
 
             return [
 
                 'success' => false,
 
-                'message'
-
-                    =>
-
-                    'Job is already running.',
+                'message' => 'Job is already running.',
 
             ];
 
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Update State
-        |--------------------------------------------------------------------------
-        */
+        $startedAt = now();
 
-        $this->repository
+        $state = ScheduledJob::FAILED;
 
-            ->updateJob(
-
-                $job,
-
-                [
-
-                    'state'
-
-                        =>
-
-                        ScheduledJob::RUNNING,
-
-                ]
-
-            );
+        $result = [];
 
         /*
         |--------------------------------------------------------------------------
-        | Activity
+        | Mark Running
         |--------------------------------------------------------------------------
         */
 
-        $this->activity
+        $this->repository->updateJob(
 
-            ->record(
+            $job,
 
-                'Scheduler',
+            [
 
-                "{$job->job_name} started."
+                'state' => ScheduledJob::RUNNING,
 
-            );
+            ]
 
-        /*
-        |--------------------------------------------------------------------------
-        | Python Execution
-        |--------------------------------------------------------------------------
-        */
+        );
 
-        $result =
+        $this->activity->record(
 
-            $this->python
+            'Scheduler',
 
-                ->runJob(
+            'Job Started',
 
-                    $job->job_key
+            sprintf(
 
-                );
+                '%s started (%s).',
 
-        /*
-        |--------------------------------------------------------------------------
-        | Final State
-        |--------------------------------------------------------------------------
-        */
+                $job->job_name,
 
-        $state =
+                $manual
+                    ? 'Manual'
+                    : 'Automatic'
 
-            $result['success']
+            )
 
-                ?
+        );
 
-                ScheduledJob::SUCCESS
+        try {
 
-                :
+            /*
+            |--------------------------------------------------------------------------
+            | Execute Python
+            |--------------------------------------------------------------------------
+            */
 
-                'FAILED';
+            $result =
 
-        $this->repository
+                $this->python
 
-            ->updateJob(
+                    ->runJob(
+
+                        $job->job_key
+
+                    );
+
+            $state =
+
+                $result['success']
+
+                    ?
+
+                    ScheduledJob::SUCCESS
+
+                    :
+
+                    ScheduledJob::FAILED;
+
+        } catch (\Throwable $exception) {
+
+            $result = [
+
+                'success' => false,
+
+                'status' => 'PHP_EXCEPTION',
+
+                'exit_code' => null,
+
+                'duration_ms' => now()->diffInMilliseconds(
+
+                    $startedAt
+
+                ),
+
+                'stdout' => null,
+
+                'stderr' => null,
+
+                'message' => $exception->getMessage(),
+
+            ];
+
+            $state = ScheduledJob::FAILED;
+
+        } finally {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Update Scheduled Job
+            |--------------------------------------------------------------------------
+            */
+
+            $this->repository->updateJob(
 
                 $job,
 
@@ -339,22 +378,125 @@ class SchedulerService
 
                         now(),
 
+                    'last_duration_ms'
+
+                        =>
+
+                        $result['duration_ms'] ?? null,
+
+                    'last_exit_code'
+
+                        =>
+
+                        $result['exit_code'] ?? null,
+
+                    'last_error_message'
+
+                        =>
+
+                        $result['message'] ?? null,
+
                 ]
 
             );
 
-        $this->activity
+            /*
+            |--------------------------------------------------------------------------
+            | Store Execution History
+            |--------------------------------------------------------------------------
+            */
 
-            ->record(
+            $this->executions->record([
+
+                'scheduled_job_id'
+
+                    =>
+
+                    $job->id,
+
+                'is_manual'
+
+                    =>
+
+                    $manual,
+
+                'status'
+
+                    =>
+
+                    $state,
+
+                'exit_code'
+
+                    =>
+
+                    $result['exit_code'] ?? null,
+
+                'duration_ms'
+
+                    =>
+
+                    $result['duration_ms'] ?? 0,
+
+                'stdout'
+
+                    =>
+
+                    $result['stdout'] ?? null,
+
+                'stderr'
+
+                    =>
+
+                    $result['stderr'] ?? null,
+
+                'error_message'
+
+                    =>
+
+                    $result['message'] ?? null,
+
+                'started_at'
+
+                    =>
+
+                    $startedAt,
+
+                'finished_at'
+
+                    =>
+
+                    now(),
+
+            ]);
+
+            /*
+            |--------------------------------------------------------------------------
+            | Activity
+            |--------------------------------------------------------------------------
+            */
+
+            $this->activity->record(
 
                 'Scheduler',
 
-                "{$job->job_name} finished ({$state})."
+                'Job Finished',
+
+                sprintf(
+
+                    '%s finished (%s).',
+
+                    $job->job_name,
+
+                    $state
+
+                )
 
             );
 
-        return $result;
+        }
 
+        return $result;
     }
 
         /*
@@ -363,7 +505,6 @@ class SchedulerService
     |--------------------------------------------------------------------------
     */
 
-    
     /**
      * Enable or disable one scheduled job.
      */
@@ -377,7 +518,9 @@ class SchedulerService
             $this->repository
 
                 ->findByJobKey(
+
                     $jobKey
+
                 );
 
         if (! $job) {
@@ -414,6 +557,8 @@ class SchedulerService
 
                     'Scheduler',
 
+                    'Configuration',
+
                     sprintf(
 
                         '%s %s.',
@@ -421,7 +566,9 @@ class SchedulerService
                         $job->job_name,
 
                         $enabled
+
                             ? 'enabled'
+
                             : 'disabled'
 
                     )
@@ -445,8 +592,11 @@ class SchedulerService
         $job =
 
             $this->repository
+
                 ->findByJobKey(
+
                     $jobKey
+
                 );
 
         if (! $job) {
@@ -474,7 +624,9 @@ class SchedulerService
                 $attributes,
 
                 array_flip(
+
                     $allowed
+
                 )
 
             );
@@ -482,6 +634,7 @@ class SchedulerService
         $updated =
 
             $this->repository
+
                 ->updateJob(
 
                     $job,
@@ -493,9 +646,12 @@ class SchedulerService
         if ($updated) {
 
             $this->activity
+
                 ->record(
 
                     'Scheduler',
+
+                    'Configuration',
 
                     "{$job->job_name} schedule updated."
 
@@ -507,9 +663,9 @@ class SchedulerService
 
     }
 
-        /*
+    /*
     |--------------------------------------------------------------------------
-    | Next Scheduled Runs
+    | Upcoming Jobs
     |--------------------------------------------------------------------------
     */
 
@@ -549,9 +705,7 @@ class SchedulerService
 
             $this->summary();
 
-        $status =
-
-            'HEALTHY';
+        $status = 'HEALTHY';
 
         if (
 
@@ -559,9 +713,7 @@ class SchedulerService
 
         ) {
 
-            $status =
-
-                'WARNING';
+            $status = 'WARNING';
 
         }
 
@@ -571,9 +723,7 @@ class SchedulerService
 
         ) {
 
-            $status =
-
-                'CRITICAL';
+            $status = 'CRITICAL';
 
         }
 
@@ -610,6 +760,12 @@ class SchedulerService
                         'No scheduled jobs are enabled.',
 
                 },
+
+            'summary'
+
+                =>
+
+                $summary,
 
             'generated_at'
 

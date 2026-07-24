@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ScheduledJob extends Model
 {
@@ -190,5 +191,26 @@ class ScheduledJob extends Model
     public function hasFailed(): bool
     {
         return $this->state === self::FAILED;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Job execution history.
+     */
+    public function executions(): HasMany
+    {
+        return
+
+            $this->hasMany(
+
+                JobExecution::class
+
+            );
+
     }
 }
