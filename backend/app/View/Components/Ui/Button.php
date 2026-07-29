@@ -24,9 +24,7 @@ class Button extends BaseComponent
         public bool $loading = false,
         public ?string $loadingText = null,
         public bool $disabled = false,
-        
     ) {
-
         $allowedTypes = [
             'button',
             'submit',
@@ -36,7 +34,7 @@ class Button extends BaseComponent
         $this->type = in_array($type, $allowedTypes, true)
             ? $type
             : 'button';
-            
+
         $defaultVariant = config('ui.button.default_variant');
 
         $this->variant = ButtonVariant::tryFrom(
@@ -51,18 +49,15 @@ class Button extends BaseComponent
     }
 
     /**
-     * Return the complete CSS class string.
+     * Style object.
      */
-    public function classes(): string
+    public function style(): ButtonStyle
     {
-        return ButtonStyle::make(
-            variant: $this->variant,
-            size: $this->size,
-        );
+        return new ButtonStyle();
     }
 
     /**
-     * Return whether the button should be disabled.
+     * Whether button is disabled.
      */
     public function isDisabled(): bool
     {
@@ -70,7 +65,7 @@ class Button extends BaseComponent
     }
 
     /**
-     * Return the loading text.
+     * Loading label.
      */
     public function loadingLabel(): string
     {
@@ -78,9 +73,6 @@ class Button extends BaseComponent
             ?: config('ui.button.default_loading_text');
     }
 
-    /**
-     * Render the component.
-     */
     public function render(): View|Closure|string
     {
         return view('components.ui.button');

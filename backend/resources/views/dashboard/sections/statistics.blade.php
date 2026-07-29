@@ -1,13 +1,27 @@
-<div class="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
 
-    @foreach ($statistics as $statistic)
+    <x-ui.stat-card
+        title="Current Gold Price"
+        :value="'$' . number_format($dashboard->currentGoldPrice, 2)"
+        :description="$dashboard->priceChange . '% Today'"
+    />
 
-        <x-ui.stat-card
-            :title="$statistic['title']"
-            :value="$statistic['value']"
-            :description="$statistic['description']"
-        />
+    <x-ui.stat-card
+        title="Prediction"
+        :value="'$' . number_format($dashboard->predictionPrice, 2)"
+        :description="$dashboard->predictionTrend"
+    />
 
-    @endforeach
+    <x-ui.stat-card
+        title="Model Accuracy"
+        :value="number_format($dashboard->accuracy, 2) . '%'"
+        description="MAPE"
+    />
+
+    <x-ui.stat-card
+        title="Market Sentiment"
+        :value="$dashboard->sentiment"
+        :description="$dashboard->newsCount . ' Articles'"
+    />
 
 </div>

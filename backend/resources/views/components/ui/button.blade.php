@@ -1,6 +1,10 @@
+@php
+    $style = $style();
+@endphp
+
 <button
     type="{{ $type }}"
-    {{ $attributes->class($classes()) }}
+    {{ $attributes->class($style->wrapper()) }}
     @disabled($isDisabled())
     @if($loading)
         aria-busy="true"
@@ -10,15 +14,19 @@
     @if($loading)
 
         <span
-            class="inline-block h-4 w-4 mr-2 animate-spin rounded-full border-2 border-current border-t-transparent"
+            class="{{ $style->loadingIcon() }}"
             aria-hidden="true">
         </span>
 
-        {{ $loadingLabel() }}
+        <span class="{{ $style->label() }}">
+            {{ $loadingLabel() }}
+        </span>
 
     @else
 
-        {{ $slot }}
+        <span class="{{ $style->label() }}">
+            {{ $slot }}
+        </span>
 
     @endif
 

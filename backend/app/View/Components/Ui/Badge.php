@@ -1,41 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components\Ui;
 
 use App\Enums\Ui\BadgeVariant;
 use App\Support\Ui\Styles\BadgeStyle;
-use App\View\Components\BaseComponent;
-use Closure;
-use Illuminate\Contracts\View\View;
+use Illuminate\View\Component;
+use Illuminate\View\View;
 
-class Badge extends BaseComponent
+final class Badge extends Component
 {
     /**
      * Badge visual style.
      */
-    public BadgeVariant $variant;
-
     public function __construct(
-        string $variant = 'primary',
+        public BadgeVariant|string $variant = BadgeVariant::Primary,
     ) {
-        $this->variant = BadgeVariant::tryFrom($variant)
-            ?? BadgeVariant::Primary;
+        if (is_string($this->variant)) {
+            $this->variant = BadgeVariant::tryFrom($this->variant)
+                ?? BadgeVariant::Primary;
+        }
     }
 
     /**
-     * Build Tailwind classes.
+     * Style object.
      */
-    public function classes(): string
+    public function style(): BadgeStyle
     {
-        return BadgeStyle::make(
-            $this->variant,
-        );
+        return new BadgeStyle($this->variant);
     }
 
-    /**
-     * Render component.
-     */
-    public function render(): View|Closure|string
+    public function render(): View
     {
         return view('components.ui.badge');
     }

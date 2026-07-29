@@ -1,47 +1,47 @@
-<div class="space-y-1">
+@php
+    $style = $style();
+@endphp
 
-    <div class="flex items-start gap-3">
+<div class="{{ $style->wrapper() }}">
 
-        <input
-            {{ $attributes->merge([
-                'id' => $id,
-                'type' => 'radio',
-                'name' => $name,
-                'value' => $value,
-                'class' => $classes(),
-            ]) }}
+    <input
+        {{ $attributes->merge([
+            'id' => $id,
+            'type' => 'radio',
+            'name' => $name,
+            'value' => $value,
+            'class' => $style->radio(),
+        ]) }}
 
-            @checked($checked)
-            @disabled($disabled)
-            @required($required)
-        >
+        @checked($checked)
+        @disabled($disabled)
+        @required($required)
+    >
 
-        <div class="flex-1">
+    <div class="flex-1">
 
-            @if ($label !== '')
-                <label
-                    for="{{ $id }}"
-                    class="block text-sm font-medium text-text cursor-pointer"
-                >
-                    {{ $label }}
+        @if ($label !== '')
+            <label
+                for="{{ $id }}"
+                class="{{ $style->label() }}"
+            >
+                {{ $label }}
 
-                    @if ($required)
-                        <span class="text-danger">*</span>
-                    @endif
-                </label>
-            @endif
+                @if ($required)
+                    <span class="text-red-500">*</span>
+                @endif
+            </label>
+        @endif
 
-            @if ($error)
-                <p class="mt-1 text-sm text-danger">
-                    {{ $error }}
-                </p>
-            @elseif ($hint !== '')
-                <p class="mt-1 text-sm text-text-secondary">
-                    {{ $hint }}
-                </p>
-            @endif
-
-        </div>
+        @if ($errorMessage())
+            <p class="{{ $style->error() }}">
+                {{ $errorMessage() }}
+            </p>
+        @elseif ($hint !== '')
+            <p class="{{ $style->helper() }}">
+                {{ $hint }}
+            </p>
+        @endif
 
     </div>
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components\Ui;
 
 use App\Enums\Ui\InputSize;
@@ -61,25 +63,23 @@ class Input extends FieldComponent
      */
     public function hasError(): bool
     {
-        return $this->name !== '' && $errors = session('errors')
-            ? $errors->has($this->name)
-            : false;
+        $errors = session('errors');
+
+        return $this->name !== ''
+            && $errors
+            && $errors->has($this->name);
     }
 
     /**
-     * Build Tailwind classes.
+     * Style object.
      */
-    public function classes(): string
+    public function style(): InputStyle
     {
-        return InputStyle::make(
-            $this->size,
-            $this->hasError(),
-            $this->disabled,
-        );
+        return new InputStyle();
     }
 
     /**
-     * Get the first validation error.
+     * First validation error.
      */
     public function errorMessage(): ?string
     {

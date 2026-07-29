@@ -1,20 +1,24 @@
-<div
-    {{ $attributes->class($classes()) }}
-    data-debug="{{ $classes() }}"
->
+@php
+    $style = $style();
+@endphp
+
+<div {{ $attributes->class($style->wrapper()) }}>
 
     @isset($header)
-        <div class="border-b border-border px-6 py-4">
+        <div class="{{ $style->header() }}">
             {{ $header }}
         </div>
     @endisset
 
-    <div class="{{ $bodyClasses() }}">
+    <div {{ $attributes->only('id')->class([
+        $style->body(),
+        $bodyPadding(),
+    ]) }}>
         {{ $slot }}
     </div>
 
     @isset($footer)
-        <div class="border-t border-border px-6 py-4">
+        <div class="{{ $style->footer() }}">
             {{ $footer }}
         </div>
     @endisset

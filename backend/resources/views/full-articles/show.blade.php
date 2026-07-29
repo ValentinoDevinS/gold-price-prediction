@@ -4,37 +4,82 @@
 
 @section('content')
 
-<x-ui.stack>
+<x-ui.page-header
+    title="Full Article"
+    description="Downloaded article content."
+>
 
-    <x-ui.page-header
-        title="Full Article"
-        description="View the downloaded article before the cleaning process."
-    >
+<x-slot:actions>
 
-        <x-slot:actions>
+<a
+    href="{{ route('full-articles.index') }}"
+    class="btn btn-secondary"
+>
+    ← Back
+</a>
 
-            <a
-                href="{{ route('full-articles.index') }}"
-                class="btn btn-secondary"
-            >
-                Back to Full Articles
-            </a>
+</x-slot:actions>
 
-            <a
-                href="{{ route('articles.show', $fullArticle->article->uuid) }}"
-                class="btn btn-primary"
-            >
-                View Pipeline
-            </a>
+</x-ui.page-header>
 
-        </x-slot:actions>
+<div class="mt-6">
 
-    </x-ui.page-header>
+<x-ui.card>
 
-    @include('full-articles.sections.metadata')
+<x-slot:header>
 
-    @include('full-articles.sections.content')
+<h2 class="text-lg font-semibold">
+{{ $fullArticle->article->title }}
+</h2>
 
-</x-ui.stack>
+</x-slot:header>
+
+<div class="space-y-6">
+
+<div>
+
+<h3 class="font-semibold mb-2">
+Content
+</h3>
+
+<div class="prose max-w-none whitespace-pre-line">
+
+{{ $fullArticle->content }}
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="grid grid-cols-2 gap-6">
+
+<div>
+
+<strong>Word Count</strong>
+
+<div>
+{{ number_format($fullArticle->wordCount) }}
+</div>
+
+</div>
+
+<div>
+
+<strong>Downloaded At</strong>
+
+<div>
+{{ $fullArticle->downloadedAt?->format('Y-m-d H:i:s') }}
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</x-ui.card>
+
+</div>
 
 @endsection

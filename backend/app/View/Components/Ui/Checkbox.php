@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components\Ui;
 
 use App\Support\Ui\Styles\CheckboxStyle;
@@ -53,14 +55,35 @@ class Checkbox extends FieldComponent
     }
 
     /**
-     * Build Tailwind classes.
+     * Style object.
      */
-    public function classes(): string
+    public function style(): CheckboxStyle
     {
-        return CheckboxStyle::make(
-            $this->hasError(),
-            $this->disabled,
-        );
+        return new CheckboxStyle();
+    }
+
+    /**
+     * Whether this checkbox has validation errors.
+     */
+    public function hasError(): bool
+    {
+        $errors = session('errors');
+
+        return $this->name !== ''
+            && $errors
+            && $errors->has($this->name);
+    }
+
+    /**
+     * First validation error.
+     */
+    public function errorMessage(): ?string
+    {
+        if (! $this->hasError()) {
+            return null;
+        }
+
+        return session('errors')->first($this->name);
     }
 
     public function render(): View|Closure|string

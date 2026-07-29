@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components\Ui;
 
 use App\Enums\Ui\InputSize;
@@ -8,7 +10,6 @@ use App\View\Components\FieldComponent;
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Collection;
 
 class Select extends FieldComponent
 {
@@ -77,15 +78,35 @@ class Select extends FieldComponent
     }
 
     /**
-     * Build Tailwind classes.
+     * Style object.
      */
-    public function classes(): string
+    public function style(): SelectStyle
     {
-        return SelectStyle::make(
-            $this->size,
-            $this->hasError(),
-            $this->disabled,
-        );
+        return new SelectStyle();
+    }
+
+    /**
+     * Whether the field has validation errors.
+     */
+    public function hasError(): bool
+    {
+        $errors = session('errors');
+
+        return $this->name !== ''
+            && $errors
+            && $errors->has($this->name);
+    }
+
+    /**
+     * First validation error.
+     */
+    public function errorMessage(): ?string
+    {
+        if (! $this->hasError()) {
+            return null;
+        }
+
+        return session('errors')->first($this->name);
     }
 
     public function render(): View|Closure|string

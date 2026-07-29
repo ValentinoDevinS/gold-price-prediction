@@ -1,29 +1,41 @@
-<div {{ $attributes->merge([
-    'class' => $style()->wrapper(),
-]) }}>
+@php
+    $style = $style();
+@endphp
 
-    <h3 class="{{ $style()->title() }}">
-        {{ $title }}
-    </h3>
+<div {{ $attributes->class($style->wrapper()) }}>
 
-    <div class="{{ $style()->value() }}">
-        {{ $value }}
-    </div>
+    <div class="flex items-start justify-between">
 
-    @if($description)
+        <div class="flex-1">
 
-        <p class="{{ $style()->description() }}">
-            {{ $description }}
-        </p>
+            <p class="{{ $style->title() }}">
+                {{ $title }}
+            </p>
 
-    @endif
+            <h3 class="{{ $style->value() }}">
+                {{ $value }}
+            </h3>
 
-    @isset($footer)
+            @if($description)
 
-        <div class="{{ $style()->footer() }}">
-            {{ $footer }}
+                <p class="{{ $style->description() }}">
+                    {{ $description }}
+                </p>
+
+            @endif
+
         </div>
 
-    @endisset
+        @isset($icon)
+
+            <div class="{{ $style->icon() }}">
+
+                {{ $icon }}
+
+            </div>
+
+        @endisset
+
+    </div>
 
 </div>

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\CleanArticle;
 use App\Repositories\CleanArticleRepository;
+use App\Repositories\FullArticleRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class CleanArticleService extends BaseService

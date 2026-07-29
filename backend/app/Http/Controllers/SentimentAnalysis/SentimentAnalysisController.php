@@ -1,51 +1,65 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\SentimentAnalysis;
 
 use App\Http\Controllers\Controller;
-use App\Services\SentimentAnalysisService;
-use Illuminate\Http\Request;
+use App\Http\Requests\SentimentAnalysis\SentimentAnalysisIndexRequest;
+use App\Http\Requests\SentimentAnalysis\SentimentAnalysisShowRequest;
+use App\Services\SentimentAnalysis\SentimentAnalysisDashboardService;
+use App\Services\SentimentAnalysis\SentimentAnalysisQueryService;
 
-class SentimentAnalysisController extends Controller
+final class SentimentAnalysisController extends Controller
 {
     public function __construct(
-        private readonly SentimentAnalysisService $service
+        private readonly SentimentAnalysisDashboardService $dashboardService,
+        private readonly SentimentAnalysisQueryService $queryService,
     ) {
     }
 
     /**
-     * Display a paginated list of sentiment analyses.
+     * Display sentiment analysis dashboard.
      */
-    public function index(Request $request)
-    {
-        $sentiments = $this->service->getPaginated(
-            filters: array_filter([
-                'sentiment_label' => $request->input('sentiment_label'),
-                'model_name'      => $request->input('model_name'),
-            ]),
-            search: null,
-            sort: $request->input('sort'),
-            direction: $request->input('direction'),
-            perPage: (int) $request->input('per_page', 20),
-        );
+    public function index(
+        SentimentAnalysisIndexRequest $request,
+    ) {
+
+        $dashboard = $this->dashboardService
+            ->getDashboard(
+
+                perPage: (int) $request->validated(
+                    'per_page',
+                    20,
+                ),
+
+            );
 
         return view(
-            'sentiment-analyses.index',
-            compact('sentiments')
+            'sentiment.index',
+            compact('dashboard'),
         );
     }
 
     /**
-     * Display a single sentiment analysis.
+     * Display sentiment analysis details.
      */
-    public function show(string $uuid)
-    {
-        $sentiment = $this->service
+    public function show(
+        SentimentAnalysisShowRequest $request,
+        string $uuid,
+    ) {
+
+        $sentiment = $this->queryService
             ->findByUuid($uuid);
 
+        abort_if(
+            $sentiment === null,
+            404,
+        );
+
         return view(
-            'sentiment-analyses.show',
-            compact('sentiment')
+            'sentiment.show',
+            compact('sentiment'),
         );
     }
 }

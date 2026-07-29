@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components\Ui;
 
 use App\Enums\Ui\InputSize;
@@ -55,14 +57,36 @@ class Textarea extends FieldComponent
             ?? TextareaResize::Vertical;
     }
 
-    public function classes(): string
+    /**
+     * Style object.
+     */
+    public function style(): TextareaStyle
     {
-        return TextareaStyle::make(
-            $this->size,
-            $this->resize,
-            $this->hasError(),
-            $this->disabled,
-        );
+        return new TextareaStyle();
+    }
+
+    /**
+     * Whether the field has validation errors.
+     */
+    public function hasError(): bool
+    {
+        $errors = session('errors');
+
+        return $this->name !== ''
+            && $errors
+            && $errors->has($this->name);
+    }
+
+    /**
+     * First validation error.
+     */
+    public function errorMessage(): ?string
+    {
+        if (! $this->hasError()) {
+            return null;
+        }
+
+        return session('errors')->first($this->name);
     }
 
     public function render(): View|Closure|string

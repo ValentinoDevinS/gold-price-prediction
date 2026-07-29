@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Support\Ui\Styles;
 
+use App\Enums\Ui\TableAlignment;
 use App\Support\Ui\BaseStyle;
 
 final class TableStyle extends BaseStyle
@@ -24,11 +25,18 @@ final class TableStyle extends BaseStyle
             ->build();
     }
 
-    public function responsive(): string
+    public function toolbar(): string
     {
         return $this->builder()
             ->addMany([
-                'overflow-x-auto',
+                'flex',
+                'items-center',
+                'justify-between',
+                'gap-4',
+                'border-b',
+                'border-gray-200',
+                'p-4',
+                'dark:border-gray-700',
             ])
             ->build();
     }
@@ -45,7 +53,7 @@ final class TableStyle extends BaseStyle
             ->build();
     }
 
-    public function head(): string
+    public function header(): string
     {
         return $this->builder()
             ->addMany([
@@ -55,12 +63,7 @@ final class TableStyle extends BaseStyle
             ->build();
     }
 
-    public function headRow(): string
-    {
-        return '';
-    }
-
-    public function headCell(): string
+    public function headerCell(): string
     {
         return $this->builder()
             ->addMany([
@@ -77,19 +80,12 @@ final class TableStyle extends BaseStyle
             ->build();
     }
 
-    public function body(): string
-    {
-        return $this->builder()
-            ->build();
-    }
-
     public function row(): string
     {
         return $this->builder()
             ->addMany([
                 'border-b',
                 'border-gray-200',
-                'transition-colors',
                 'hover:bg-gray-50',
                 'dark:border-gray-700',
                 'dark:hover:bg-gray-700/50',
@@ -97,42 +93,29 @@ final class TableStyle extends BaseStyle
             ->build();
     }
 
-    public function cell(): string
-    {
-        return $this->builder()
-            ->addMany([
-                'whitespace-nowrap',
-                'px-6',
-                'py-4',
-                'text-sm',
-                'text-gray-700',
-                'dark:text-gray-300',
-            ])
-            ->build();
-    }
+    public function cell(
+        ?TableAlignment $alignment = null,
+    ): string {
 
-    public function checkbox(): string
-    {
-        return $this->builder()
-            ->addMany([
-                'h-4',
-                'w-4',
-                'rounded',
-                'border-gray-300',
-                'text-indigo-600',
-                'focus:ring-indigo-500',
-            ])
-            ->build();
-    }
+        $classes = [
+            'whitespace-nowrap',
+            'px-6',
+            'py-4',
+            'text-sm',
+            'text-gray-700',
+            'dark:text-gray-300',
+        ];
 
-    public function actions(): string
-    {
+        if ($alignment === TableAlignment::Right) {
+            $classes[] = 'text-right';
+        } elseif ($alignment === TableAlignment::Center) {
+            $classes[] = 'text-center';
+        } else {
+            $classes[] = 'text-left';
+        }
+
         return $this->builder()
-            ->addMany([
-                'flex',
-                'justify-end',
-                'gap-2',
-            ])
+            ->addMany($classes)
             ->build();
     }
 
@@ -149,38 +132,14 @@ final class TableStyle extends BaseStyle
             ->build();
     }
 
-    public function loadingState(): string
-    {
-        return $this->builder()
-            ->addMany([
-                'px-6',
-                'py-8',
-            ])
-            ->build();
-    }
-
-    public function footer(): string
+    public function pagination(): string
     {
         return $this->builder()
             ->addMany([
                 'border-t',
                 'border-gray-200',
-                'bg-gray-50',
-                'px-6',
-                'py-4',
+                'p-4',
                 'dark:border-gray-700',
-                'dark:bg-gray-900',
-            ])
-            ->build();
-    }
-
-    public function pagination(): string
-    {
-        return $this->builder()
-            ->addMany([
-                'flex',
-                'items-center',
-                'justify-between',
             ])
             ->build();
     }

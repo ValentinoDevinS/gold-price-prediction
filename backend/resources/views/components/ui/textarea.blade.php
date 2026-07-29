@@ -1,14 +1,18 @@
-<div class="space-y-1">
+@php
+    $style = $style();
+@endphp
+
+<div class="{{ $style->wrapper() }}">
 
     @if ($label !== '')
         <label
             for="{{ $id }}"
-            class="block text-sm font-medium text-text"
+            class="{{ $style->label() }}"
         >
             {{ $label }}
 
             @if ($required)
-                <span class="text-danger">*</span>
+                <span class="text-red-500">*</span>
             @endif
         </label>
     @endif
@@ -19,19 +23,20 @@
             'name' => $name,
             'rows' => $rows,
             'placeholder' => $placeholder,
-            'class' => $classes(),
+            'class' => $style->textarea(),
         ]) }}
 
         @readonly($readonly)
         @disabled($disabled)
+        @required($required)
     >{{ $value }}</textarea>
 
-    @if ($error)
-        <p class="text-sm text-danger">
-            {{ $error }}
+    @if ($errorMessage())
+        <p class="{{ $style->error() }}">
+            {{ $errorMessage() }}
         </p>
     @elseif ($hint !== '')
-        <p class="text-sm text-text-secondary">
+        <p class="{{ $style->helper() }}">
             {{ $hint }}
         </p>
     @endif

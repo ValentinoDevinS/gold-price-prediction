@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components\Ui;
 
 use App\Enums\Ui\CardPadding;
@@ -33,35 +35,26 @@ class Card extends BaseComponent
     }
 
     /**
-     * Build Tailwind classes.
+     * Style object.
      */
-    public function classes(): string
+    public function style(): CardStyle
     {
-        return CardStyle::make(
-            $this->variant,
-        );
+        return new CardStyle();
     }
 
     /**
-     * Build body padding classes.
+     * Body padding classes.
      */
-    public function bodyClasses(): string
+    public function bodyPadding(): string
     {
         return match ($this->padding) {
-
             CardPadding::None => 'p-0',
-
             CardPadding::Sm => 'p-4',
-
             CardPadding::Md => 'p-6',
-
             CardPadding::Lg => 'p-8',
         };
     }
 
-    /**
-     * Render component.
-     */
     public function render(): View|Closure|string
     {
         return view('components.ui.card');

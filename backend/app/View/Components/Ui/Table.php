@@ -1,12 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\View\Components\Ui;
 
-use App\Data\Ui\TableAction;
-use App\Data\Ui\TableColumn;
-use App\Data\Ui\TableFilter;
-use App\Data\Ui\TableState;
-use App\Enums\Ui\TableDensity;
+use App\Data\Ui\TableData;
 use App\Support\Ui\Styles\TableStyle;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
@@ -14,48 +12,62 @@ use Illuminate\View\Component;
 
 class Table extends Component
 {
-    /**
-     * @param TableColumn[] $columns
-     * @param TableFilter[] $filters
-     * @param TableAction[] $actions
-     * @param DropdownItem[] $bulkActions
-     * @param ExportFormat[] $exportFormats
-     */
+    public LengthAwarePaginator $rows;
+
+    public array $columns;
+
+    public array $filters;
+
+    public array $actions;
+
+    public array $bulkActions;
+
+    public array $exportFormats;
+
+    public bool $showSearch;
+
+    public bool $showExport;
+
+    public bool $showBulkActions;
+
+    public bool $showDensity;
+
+    public bool $showColumnVisibility;
+
     public function __construct(
-        public LengthAwarePaginator $rows,
-
-        public array $columns = [],
-
-        public array $filters = [],
-
-        public array $actions = [],
-
-        public array $bulkActions = [],
-
-        public array $exportFormats = [],
-
-        public ?TableState $state = null,
-
-        public TableDensity $density = TableDensity::Comfortable,
-
-        public bool $showSearch = true,
-
-        public bool $showExport = true,
-
-        public bool $showBulkActions = true,
-
-        public bool $showDensity = true,
-
-        public bool $showColumnVisibility = true,
+        public TableData $table,
     ) {
-        $this->state ??= TableState::make();
+        $this->rows = $table->rows;
+
+        $this->columns = $table->columns;
+
+        $this->filters = $table->filters;
+
+        $this->actions = $table->actions;
+
+        $this->bulkActions = $table->bulkActions;
+
+        $this->exportFormats = $table->exportFormats;
+
+        $this->showSearch = $table->showSearch;
+
+        $this->showExport = $table->showExport;
+
+        $this->showBulkActions = $table->showBulkActions;
+
+        $this->showDensity = $table->showDensity;
+
+        $this->showColumnVisibility = $table->showColumnVisibility;
+    }
+
+    public function state()
+    {
+        return $this->table->state;
     }
 
     public function style(): TableStyle
     {
-        return new TableStyle(
-            density: $this->density,
-        );
+        return new TableStyle();
     }
 
     public function render(): View

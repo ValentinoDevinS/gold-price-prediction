@@ -1,20 +1,23 @@
 <?php
 
-use App\Http\Controllers\Web\ArticleController;
+declare(strict_types=1);
+
+use App\Http\Controllers\Article\ArticleController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')
-
-    ->group(function () {
-
-        Route::get(
-            '/articles',
-            [ArticleController::class,'index']
-        )->name('articles.index');
+    ->prefix('articles')
+    ->name('articles.')
+    ->group(function (): void {
 
         Route::get(
-            '/articles/{article}',
-            [ArticleController::class,'show']
-        )->name('articles.show');
+            '/',
+            [ArticleController::class, 'index'],
+        )->name('index');
+
+        Route::get(
+            '/{uuid}',
+            [ArticleController::class, 'show'],
+        )->name('show');
 
     });

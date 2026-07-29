@@ -4,35 +4,79 @@
 
 @section('content')
 
-<x-ui.stack>
+<x-ui.page-header
+    title="Clean Articles"
+    description="Preprocessed articles ready for sentiment analysis."
+/>
 
-    <x-ui.page-header
-        title="Clean Articles"
-        description="Browse cleaned articles after the preprocessing stage."
-    >
+<div class="mt-6">
 
-        <x-slot:actions>
+    <x-ui.stat-grid :columns="4">
 
-            <a
-                href="{{ route('full-articles.index') }}"
-                class="btn btn-secondary"
-            >
-                Back to Full Articles
-            </a>
+        <x-ui.stat-card
+            title="Total Clean Articles"
+            :value="number_format($dashboard['statistics']['total'])"
+            description="Successfully preprocessed"
+        >
+            <x-slot:icon>🧹</x-slot:icon>
+        </x-ui.stat-card>
 
-        </x-slot:actions>
+        <x-ui.stat-card
+            title="Cleaned Today"
+            :value="number_format($dashboard['statistics']['today'])"
+            description="Processed today"
+        >
+            <x-slot:icon>📅</x-slot:icon>
+        </x-ui.stat-card>
 
-    </x-ui.page-header>
+        <x-ui.stat-card
+            title="Avg Original Words"
+            :value="number_format($dashboard['statistics']['average_original_words'])"
+            description="Before preprocessing"
+        >
+            <x-slot:icon>📝</x-slot:icon>
+        </x-ui.stat-card>
 
-    {{-- Statistics --}}
-    @include('clean-articles.sections.statistics')
+        <x-ui.stat-card
+            title="Avg Clean Words"
+            :value="number_format($dashboard['statistics']['average_clean_words'])"
+            description="After preprocessing"
+        >
+            <x-slot:icon>✨</x-slot:icon>
+        </x-ui.stat-card>
 
-    {{-- Filters --}}
-    @include('clean-articles.sections.filters')
+    </x-ui.stat-grid>
 
-    {{-- Table --}}
-    @include('clean-articles.sections.table')
+</div>
 
-</x-ui.stack>
+<div class="mt-6">
+
+    <x-ui.card>
+
+        <x-slot:header>
+
+            <div class="flex items-center justify-between">
+
+                <h2 class="text-lg font-semibold">
+                    Clean Articles
+                </h2>
+
+                <x-ui.badge
+                    :variant="\App\Enums\Ui\BadgeVariant::Info"
+                >
+                    {{ $dashboard['table']->rows->total() }} Records
+                </x-ui.badge>
+
+            </div>
+
+        </x-slot:header>
+
+        <x-ui.table
+            :table="$dashboard['table']"
+        />
+
+    </x-ui.card>
+
+</div>
 
 @endsection

@@ -118,6 +118,13 @@ abstract class BaseRepository implements RepositoryInterface
             ->get();
     }
 
+    public function latestOne(): ?Model
+    {
+        return $this->query()
+            ->latest($this->defaultSort)
+            ->first();
+    }
+
     public function paginate(
         int $perPage = self::DEFAULT_PER_PAGE
     ): LengthAwarePaginator{

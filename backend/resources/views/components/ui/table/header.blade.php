@@ -11,32 +11,48 @@
         {{-- Columns --}}
         @foreach($columns as $column)
 
-            @if(! $column->hidden)
+            @continue($column->hidden)
 
-                <th class="{{ $style()->headerCell($column) }}">
-                    @if($column->sortable)
+            @php
+                $isActive = $state->sortColumn === $column->key;
 
-                        <button
-                            type="button"
-                            class="flex items-center gap-2"
-                        >
-                            <span>{{ $column->label }}</span>
+                $direction = $isActive && $state->sortDirection === 'asc'
+                    ? 'desc'
+                    : 'asc';
 
-                            <x-ui.table.sort-indicator
-                                :active="$state->sortColumn === $column->key"
-                                :direction="$state->sortDirection"
-                            />
+                $query = array_merge(
+                    request()->query(),
+                    [
+                        'sort' => $column->key,
+                        'direction' => $direction,
+                        'page' => 1,
+                    ]
+                );
+            @endphp
 
-                        </button>
+            <th class="{{ $style()->headerCell($column) }}">
 
-                    @else
+                @if($column->sortable)
 
-                        {{ $column->label }}
+                    <a
+                        href="{{ url()->current() . '?' . http_build_query($query) }}"
+                        class="inline-flex items-center gap-2 hover:text-indigo-600"
+                    >
+                        <span>{{ $column->label }}</span>
 
-                    @endif
-                </th>
+                        <x-ui.table.sort-indicator
+                            :active="$isActive"
+                            :direction="$state->sortDirection"
+                        />
+                    </a>
 
-            @endif
+                @else
+
+                    {{ $column->label }}
+
+                @endif
+
+            </th>
 
         @endforeach
 

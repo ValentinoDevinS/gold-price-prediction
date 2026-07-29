@@ -1,56 +1,81 @@
-<div class="space-y-1">
+@php
+    $style = $style();
+@endphp
+
+<div class="{{ $style->wrapper() }}">
 
     @if ($label !== '')
         <label
             for="{{ $id }}"
-            class="block text-sm font-medium text-text"
+            class="{{ $style->label() }}"
         >
             {{ $label }}
 
             @if ($required)
-                <span class="text-danger">*</span>
+                <span class="text-red-500">*</span>
             @endif
         </label>
     @endif
 
-    <select
-        {{ $attributes->merge([
-            'id' => $id,
-            'name' => $name,
-            'class' => $classes(),
-        ]) }}
+    <div class="relative">
 
-        @disabled($disabled)
-    >
+        <select
+            {{ $attributes->merge([
+                'id' => $id,
+                'name' => $name,
+                'class' => $style->select(),
+            ]) }}
 
-        @if ($placeholderOption !== '')
-            <option
-                value=""
-                @selected($value === null || $value === '')
+            @disabled($disabled)
+            @required($required)
+        >
+
+            @if ($placeholderOption !== '')
+                <option
+                    value=""
+                    @selected($value === null || $value === '')
+                >
+                    {{ $placeholderOption }}
+                </option>
+            @endif
+
+            @foreach ($options as $optionValue => $optionLabel)
+
+                <option
+                    value="{{ $optionValue }}"
+                    @selected($isSelected($optionValue))
+                >
+                    {{ $optionLabel }}
+                </option>
+
+            @endforeach
+
+        </select>
+
+        <div class="{{ $style->icon() }}">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
             >
-                {{ $placeholderOption }}
-            </option>
-        @endif
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                />
+            </svg>
+        </div>
 
-        @foreach ($options as $optionValue => $optionLabel)
+    </div>
 
-            <option
-                value="{{ $optionValue }}"
-                @selected($isSelected($optionValue))
-            >
-                {{ $optionLabel }}
-            </option>
-
-        @endforeach
-
-    </select>
-
-    @if ($error)
-        <p class="text-sm text-danger">
-            {{ $error }}
+    @if ($errorMessage())
+        <p class="{{ $style->error() }}">
+            {{ $errorMessage() }}
         </p>
     @elseif ($hint !== '')
-        <p class="text-sm text-text-secondary">
+        <p class="{{ $style->helper() }}">
             {{ $hint }}
         </p>
     @endif

@@ -4,89 +4,66 @@ declare(strict_types=1);
 
 namespace App\Services\Dashboard;
 
+use App\DTOs\Dashboard\DashboardData;
+
 final class DashboardService
 {
-    /**
-     * Dashboard statistic cards.
-     *
-     * @return array<string, array<string, string|int|null>>
-     */
-    public function statistics(): array
+    public function getDashboardData(): DashboardData
     {
-        return [
-            'articles' => [
-                'title' => 'Articles Collected',
-                'value' => 0,
-                'description' => 'News articles available',
-            ],
+        return new DashboardData(
+            currentGoldPrice: $this->currentGoldPrice(),
+            priceChange: $this->priceChange(),
 
-            'goldPrice' => [
-                'title' => 'Latest Gold Price',
-                'value' => 'N/A',
-                'description' => 'Waiting for market data',
-            ],
+            predictionPrice: $this->predictionPrice(),
+            predictionTrend: $this->predictionTrend(),
 
-            'prediction' => [
-                'title' => 'Prediction Accuracy',
-                'value' => 'N/A',
-                'description' => 'No prediction available',
-            ],
+            accuracy: $this->accuracy(),
 
-            'system' => [
-                'title' => 'System Health',
-                'value' => 'Healthy',
-                'description' => 'All services operational',
-            ],
-        ];
+            sentiment: $this->sentiment(),
+
+            newsCount: $this->newsCount(),
+
+            pipelineStatus: $this->pipelineStatus(),
+        );
     }
 
-    /**
-     * Gold price chart.
-     *
-     * @return array<int, mixed>
-     */
-    public function chart(): array
+    private function currentGoldPrice(): float
     {
-        return [];
+        return 3412.50;
     }
 
-    /**
-     * Prediction summary.
-     *
-     * @return array<int, mixed>
-     */
-    public function predictionSummary(): array
+    private function priceChange(): float
     {
-        return [];
+        return 0.72;
     }
 
-    /**
-     * Quick actions.
-     *
-     * @return array<int, mixed>
-     */
-    public function quickActions(): array
+    private function predictionPrice(): float
     {
-        return [];
+        return 3425.80;
     }
 
-    /**
-     * Recent activities.
-     *
-     * @return array<int, mixed>
-     */
-    public function recentActivities(): array
+    private function predictionTrend(): string
     {
-        return [];
+        return 'Bullish';
     }
 
-    /**
-     * Latest collected articles.
-     *
-     * @return array<int, array<string, mixed>>
-     */
-    public function latestArticles(): array
+    private function accuracy(): float
     {
-        return [];
+        return 94.30;
+    }
+
+    private function sentiment(): string
+    {
+        return 'Positive';
+    }
+
+    private function newsCount(): int
+    {
+        return 18;
+    }
+
+    private function pipelineStatus(): string
+    {
+        return 'Completed';
     }
 }

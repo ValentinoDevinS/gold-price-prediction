@@ -1,51 +1,54 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\FullArticle;
 
 use App\Http\Controllers\Controller;
-use App\Services\FullArticleService;
+use App\Services\FullArticle\FullArticleDashboardService;
+use App\Services\FullArticle\FullArticleQueryService;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class FullArticleController extends Controller
+final class FullArticleController extends Controller
 {
     public function __construct(
-        private readonly FullArticleService $service
+        private readonly FullArticleDashboardService $dashboardService,
+        private readonly FullArticleQueryService $queryService,
     ) {
     }
 
-    /**
-     * Display a paginated list of full articles.
-     */
-    public function index(Request $request)
-    {
-        $filters = $request->only([
-            'download_status',
-        ]);
-
-        $fullArticles = $this->service->getPaginated(
-            filters: $filters,
-            search: $request->input('search'),
-            sort: $request->input('sort'),
-            direction: $request->input('direction'),
-            perPage: (int) $request->input('per_page', 20),
-        );
+    public function index(
+        Request $request,
+    ): View {
 
         return view(
-            'full-articles.index',
-            compact('fullArticles')
+            'pages.full-article.index',
+            [
+                'dashboard' => $this->dashboardService->build($request),
+            ],
         );
+
     }
 
-    /**
-     * Display a single full article.
-     */
-    public function show(string $uuid)
-    {
-        $fullArticle = $this->service->findByUuid($uuid);
+    public function show(
+        string $uuid,
+    ): View {
+
+        $fullArticle = $this->queryService
+            ->findByUuid($uuid);
+
+        if ($fullArticle === null) {
+            throw new NotFoundHttpException();
+        }
 
         return view(
-            'full-articles.show',
-            compact('fullArticle')
+            'pages.full-article.show',
+            [
+                'fullArticle' => $fullArticle,
+            ],
         );
+
     }
 }

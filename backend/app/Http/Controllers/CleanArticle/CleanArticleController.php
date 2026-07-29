@@ -1,47 +1,59 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\CleanArticle;
 
 use App\Http\Controllers\Controller;
-use App\Services\CleanArticleService;
-use Illuminate\Http\Request;
+use App\Http\Requests\CleanArticle\CleanArticleIndexRequest;
+use App\Services\CleanArticle\CleanArticleDashboardService;
+use App\Services\CleanArticle\CleanArticleQueryService;
+use Illuminate\Contracts\View\View;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class CleanArticleController extends Controller
+final class CleanArticleController extends Controller
 {
     public function __construct(
-        private readonly CleanArticleService $service
+        private readonly CleanArticleDashboardService $dashboardService,
+        private readonly CleanArticleQueryService $queryService,
     ) {
     }
 
     /**
-     * Display a paginated list of clean articles.
+     * Display a listing of clean articles.
      */
-    public function index(Request $request)
-    {
-        $cleanArticles = $this->service->getPaginated(
-            search: $request->input('search'),
-            sort: $request->input('sort'),
-            direction: $request->input('direction'),
-            perPage: (int) $request->input('per_page', 20),
-        );
+    public function index(
+        CleanArticleIndexRequest $request,
+    ): View {
 
         return view(
             'clean-articles.index',
-            compact('cleanArticles')
+            [
+                'dashboard' => $this->dashboardService
+                    ->dashboard($request),
+            ]
         );
     }
 
     /**
-     * Display a single clean article.
+     * Display the specified clean article.
      */
-    public function show(string $uuid)
-    {
-        $cleanArticle = $this->service
+    public function show(
+        string $uuid,
+    ): View {
+
+        $cleanArticle = $this->queryService
             ->findByUuid($uuid);
+
+        if ($cleanArticle === null) {
+            throw new NotFoundHttpException();
+        }
 
         return view(
             'clean-articles.show',
-            compact('cleanArticle')
+            [
+                'cleanArticle' => $cleanArticle,
+            ]
         );
     }
 }

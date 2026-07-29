@@ -95,6 +95,27 @@ final class DropdownStyle extends BaseStyle
                 'h-4',
                 'w-4',
                 'shrink-0',
+                'flex',
+                'items-center',
+                'justify-center',
+            ])
+            ->build();
+    }
+
+    /**
+     * Width reserved for the checkmark so all items align.
+     */
+    public function checkmark(): string
+    {
+        return $this->builder()
+            ->addMany([
+                'flex',
+                'h-4',
+                'w-4',
+                'shrink-0',
+                'items-center',
+                'justify-center',
+                'text-indigo-600',
             ])
             ->build();
     }

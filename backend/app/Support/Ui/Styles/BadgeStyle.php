@@ -25,6 +25,36 @@ final class BadgeStyle extends BaseStyle
             ->build();
     }
 
+    public function primary(): string
+    {
+        return 'bg-indigo-100 text-indigo-800';
+    }
+
+    public function success(): string
+    {
+        return 'bg-green-100 text-green-800';
+    }
+
+    public function warning(): string
+    {
+        return 'bg-yellow-100 text-yellow-800';
+    }
+
+    public function danger(): string
+    {
+        return 'bg-red-100 text-red-800';
+    }
+
+    public function secondary(): string
+    {
+        return 'bg-gray-100 text-gray-800';
+    }
+
+    public function info(): string
+    {
+        return 'bg-blue-100 text-blue-800';
+    }
+
     public function icon(): string
     {
         return $this->builder()
@@ -39,9 +69,7 @@ final class BadgeStyle extends BaseStyle
     public function label(): string
     {
         return $this->builder()
-            ->addMany([
-                'leading-none',
-            ])
+            ->add('leading-none')
             ->build();
     }
 }

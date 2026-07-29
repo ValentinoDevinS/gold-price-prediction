@@ -5,63 +5,49 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Article;
 
 use App\Http\Controllers\Controller;
-use App\Services\ArticleService;
+use App\Http\Requests\Article\ArticleIndexRequest;
+use App\Services\Article\ArticleDashboardService;
+use App\Services\Article\ArticleQueryService;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class ArticleController extends Controller
 {
     public function __construct(
-        private readonly ArticleService $articleService,
+        private readonly ArticleDashboardService $dashboardService,
+        private readonly ArticleQueryService $queryService,
     ) {
     }
 
-    /**
-     * Display a listing of articles.
-     */
-    public function index(Request $request): View
-    {
-        $articles = $this->articleService->getPaginated(
-            filters: [
-                'status' => $request->string('status')->toString(),
-                'source' => $request->string('source')->toString(),
-                'country' => $request->string('country')->toString(),
-                'language' => $request->string('language')->toString(),
-                'scraper' => $request->string('scraper')->toString(),
-            ],
-            search: $request->string('search')->toString(),
-            sort: $request->string('sort')->toString() ?: null,
-            direction: $request->string('direction')->toString() ?: null,
-            perPage: (int) $request->integer('per_page', 20),
-        );
+    public function index(
+        ArticleIndexRequest $request,
+    ): View {
 
         return view(
-            'articles.index',
+            'pages.article.index',
             [
-
-                'articles' => $articles,
-
-                'statistics' => $this
-                    ->articleService
-                    ->statistics(),
-
-            ]
+                'dashboard' => $this->dashboardService
+                    ->build($request),
+            ],
         );
     }
 
-    /**
-     * Display a single article.
-     */
     public function show(
-        string $uuid
-    ): View
-    {
+        string $uuid,
+    ): View {
+
+        $article = $this->queryService
+            ->findByUuid($uuid);
+
+        if ($article === null) {
+            throw new NotFoundHttpException();
+        }
+
         return view(
-            'articles.show',
+            'pages.article.show',
             [
-                'article' => $this->articleService
-                    ->findPipelineOrFailByUuid($uuid),
-            ]
+                'article' => $article,
+            ],
         );
     }
 }

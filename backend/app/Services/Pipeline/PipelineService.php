@@ -1,107 +1,78 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Pipeline;
 
-use App\Services\ArticleService;
-use App\Services\FullArticleService;
-use App\Services\CleanArticleService;
-use App\Services\SentimentAnalysisService;
-use App\Services\FeatureSnapshotService;
-use App\Services\PredictionResultService;
-use App\Services\EnsembleResultService;
-use App\Services\PredictionEvaluationService;
-use Illuminate\Support\Facades\DB;
-use Throwable;
+use App\Services\Pipeline\DTO\PipelineResult;
+use App\Services\Pipeline\Registry\PipelineConfiguration;
+use App\Services\Pipeline\Registry\PipelineRegistry;
+use InvalidArgumentException;
 
-class PipelineService
+final class PipelineService
 {
     public function __construct(
-        private readonly ArticleService $articleService,
-        private readonly FullArticleService $fullArticleService,
-        private readonly CleanArticleService $cleanArticleService,
-        private readonly SentimentAnalysisService $sentimentAnalysisService,
-        private readonly FeatureSnapshotService $featureSnapshotService,
-        private readonly PredictionResultService $predictionResultService,
-        private readonly EnsembleResultService $ensembleResultService,
-        private readonly PredictionEvaluationService $predictionEvaluationService,
+        private readonly PipelineRegistry $registry,
     ) {
     }
 
     /**
-     * Execute the complete AI pipeline.
+     * Execute a pipeline by name.
+     *
+     * @throws InvalidArgumentException
      */
-    public function run(): array
+    public function run(string $name): PipelineResult
     {
-        DB::beginTransaction();
+        $configuration = $this->registry->get($name);
 
-        try {
+        $this->ensureEnabled($configuration);
 
-            $articleContext =
+        return $configuration
+            ->pipeline()
+            ->execute();
+    }
 
-                $this->runArticlePipeline();
+    /**
+     * Execute all automatic pipelines.
+     *
+     * @return PipelineResult[]
+     */
+    public function runAll(): array
+    {
+        $results = [];
 
-            $predictionContext =
-
-                $this->runPredictionPipeline(
-                    $articleContext
-                );
-
-            $evaluationContext =
-
-                $this->runEvaluationPipeline(
-                    $predictionContext
-                );
-
-            DB::commit();
-
-            return [
-
-                'success' => true,
-
-                'message' => 'Pipeline completed successfully.',
-
-                'context' => $evaluationContext,
-
-            ];
-
-        } catch (Throwable $exception) {
-
-            DB::rollBack();
-
-            return [
-
-                'success' => false,
-
-                'message' => $exception->getMessage(),
-
-            ];
-
+        foreach ($this->registry->automatic() as $configuration) {
+            $results[] = $configuration
+                ->pipeline()
+                ->execute();
         }
+
+        return $results;
     }
 
     /**
-     * Execute article processing pipeline.
+     * Return all registered pipeline configurations.
+     *
+     * @return PipelineConfiguration[]
      */
-    protected function runArticlePipeline(): array
+    public function available(): array
     {
-        return [];
+        return $this->registry->all();
     }
 
     /**
-     * Execute AI prediction pipeline.
+     * Ensure a pipeline is enabled.
      */
-    protected function runPredictionPipeline(
-        array $context
-    ): array {
-        return $context;
-    }
-
-    /**
-     * Execute prediction evaluation pipeline.
-     */
-    protected function runEvaluationPipeline(
-        array $context
-    ): array {
-        return $context;
+    private function ensureEnabled(
+        PipelineConfiguration $configuration
+    ): void {
+        if (! $configuration->enabled()) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Pipeline "%s" is disabled.',
+                    $configuration->name()
+                )
+            );
+        }
     }
 }

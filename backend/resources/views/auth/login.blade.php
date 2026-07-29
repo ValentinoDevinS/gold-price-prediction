@@ -3,7 +3,7 @@
     <x-ui.card>
 
         <x-slot:header>
-            <h1>Asset Procurement System</h1>
+            <h1>Gold Price Prediction & Investment Decision Support System</h1>
             <p>Sign in to continue.</p>
         </x-slot:header>
 

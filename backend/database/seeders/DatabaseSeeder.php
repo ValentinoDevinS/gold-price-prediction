@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             PredictionResultSeeder::class,
             EnsembleResultSeeder::class,
             ScheduledJobSeeder::class,
+
         ]);
     }
 }
